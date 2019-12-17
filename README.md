@@ -16,7 +16,5 @@ At a minumum, you must provide a dataframe / tibble or data.table containing :
 - group_var -  a character vector that denotes the unique location for the patient during the current admission. 
 Patients can move more than once during an interval, therefore we need to know each unique location for each move. 
 - time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
-- summarise FALSE (default) returns one row per patient and group_var for each unit of time they are 'IN'.  
-TRUE provides an overall grouped count of patients by the specified time unit. This is the quickest way to get a count by time interval
 
 
