@@ -2,11 +2,11 @@
 #'
 #' @param df dataframe, tibble or data.table
 #' @param identifier unique patient identifier
-#' @param admit_datetime datetime of admission as POSIXct yyyy-mm-dd
-#' @param discharge_datetime datetime of discharge as POSIXct yyyy-mm-dd
+#' @param admit_datetime datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss
+#' @param discharge_datetime datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss
 #' @param group_var unique character vector to identify location/clinician at each move
 #' @param time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
-#' @param summarise FALSE returns one row per patient and groupvar for each unit of time they 'IN'
+#' @param summarise FALSE returns one row per patient and groupvar for each unit of time they are 'IN'
 #' TRUE provides an overall grouped count of patients by the specified time unit
 #'
 #' @return data.table showing identifier, group_var and count by relevant unit of time
