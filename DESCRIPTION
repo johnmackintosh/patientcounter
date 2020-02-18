@@ -8,8 +8,11 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: What license it uses
+License: GPL-3
 Encoding: UTF-8
+Depends: R (>= 2.10), data.table
+Imports: lubridate
 LazyData: true
 URL: https://github.com/johnmackintosh/patientcounter
 BugReports: https://github.com/johnmackintosh/patientcounter/issues
+RoxygenNote: 7.0.2

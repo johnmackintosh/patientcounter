@@ -1,3 +1,16 @@
 .Rproj.user
 .Rhistory
 .RData
+
+# Excel
+*xls*
+^.xlsx
+
+# Excel temporary
+~$*.xls*
+~$*.xl*
+^~$*.xl*
+
+# Excel Backup File
+*.xlk
+
