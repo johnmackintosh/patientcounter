@@ -2,6 +2,9 @@
 .Rhistory
 .RData
 
+^patientcounter\.Rproj$
+^\.Rproj\.user$
+
 # Excel
 *xls*
 ^.xlsx

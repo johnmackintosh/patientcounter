@@ -1,13 +1,15 @@
 Package: patientcounter
-Title: What the Package Does (One Line, Title Case)
+Title: Counts patients quickly
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "John",
+           family = "MacKintosh",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "john.mackintosh@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Fast, flexible census of patients in hospital locations during a 
+    specified date range. Obtain net count of patients, accounting for those
+    whose admissions may overlap your target date range.
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 2.10), data.table
