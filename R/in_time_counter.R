@@ -63,7 +63,7 @@ in_time_counter <- function(df,
   #   stop("The discharge_datetime column must be POSIXct")
   # }
 
-  #maxdate <- patient_DT[, max(get(discharge_datetime), na.rm = TRUE)]
+
   maxdate <- max(patient_DT[[discharge_datetime]],na.rm = TRUE)
 
   data.table::setnafill(patient_DT, type = "const", fill = maxdate, cols = discharge_datetime)
@@ -73,17 +73,17 @@ in_time_counter <- function(df,
 
 
   pat_res <- patient_DT[, .(in_time = seq(join_start, join_end, by = time_unit)),
-                by = .(identifier = get(identifier),
-                       group_var = get(group_var),
-                       ID = seq_len(nrow(patient_DT)))][order(in_time)]
+                        by = .(identifier = get(identifier),
+                               group_var = get(group_var),
+                               ID = seq_len(nrow(patient_DT)))][order(in_time)]
 
 
- res <-  if (!summarise) {
-   pat_res
- } else {
-     pat_res[, .N, .(in_time)]
- }
- return(res)
+  res <-  if (!summarise) {
+    pat_res
+  } else {
+    pat_res[, .N, .(in_time)]
+  }
+  return(res)
 
 
 }
