@@ -22,7 +22,7 @@ in_time_counter <- function(df,
                             discharge_datetime,
                             group_var,
                             time_unit = "1 hour",
-                            summarise = FALSE) {
+                            summarise = TRUE) {
 
   ##### check all arguments provided #####
 
