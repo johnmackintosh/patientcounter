@@ -3,5 +3,5 @@
 
 ^LICENSE\.md$
 
-
+^\.travis\.yml$
 [.]xlsx$
