@@ -11,7 +11,7 @@ in_time_counter(
   discharge_datetime,
   group_var,
   time_unit = "1 hour",
-  summarise = FALSE
+  results = c("patient", "group", "total")
 )
 }
 \arguments{
@@ -27,8 +27,9 @@ in_time_counter(
 
 \item{time_unit}{character string to denote time intervals to count by e.g. "1 hour", "15 mins"}
 
-\item{summarise}{FALSE returns one row per patient and groupvar for each unit of time they are 'IN'
-TRUE provides an overall grouped count of patients by the specified time unit}
+\item{results}{patient returns one row per patient, groupvar and interval.
+group provides an overall grouped count of patients by the specified time interval.
+total returns the grand total of patients 'IN' by each unique time interval.}
 }
 \value{
 data.table showing identifier, group_var and count by relevant unit of time
