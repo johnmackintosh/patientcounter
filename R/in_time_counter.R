@@ -6,8 +6,9 @@
 #' @param discharge_datetime datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss
 #' @param group_var unique character vector to identify location/clinician at each move
 #' @param time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
-#' @param summarise FALSE returns one row per patient and groupvar for each unit of time they are 'IN'
-#' TRUE provides an overall grouped count of patients by the specified time unit
+#' @param results patient returns one row per patient, groupvar and interval.
+#' group provides an overall grouped count of patients by the specified time interval.
+#' total returns the grand total of patients 'IN' by each unique time interval.
 #'
 #' @return data.table showing identifier, group_var and count by relevant unit of time
 #' @import data.table
@@ -22,7 +23,7 @@ in_time_counter <- function(df,
                             discharge_datetime,
                             group_var,
                             time_unit = "1 hour",
-                            summarise = FALSE) {
+                            results = c("patient","group","total")) {
 
 
 
@@ -68,12 +69,13 @@ in_time_counter <- function(df,
                                ID = seq_len(nrow(patient_DT)))][order(in_time)]
 
 
-  res <-  if (!summarise) {
+  res <-  if (results == 'patient') {
     pat_res
+  } else if (results == 'group') {
+    pat_res[, .N, .(in_time, group_var)]
   } else {
     pat_res[, .N, .(in_time)]
   }
   return(res)
-
 
 }
