@@ -24,7 +24,7 @@ in_time_counter <- function(df,
                             time_unit = "1 hour",
                             summarise = FALSE) {
 
-  ##### check all arguments provided #####
+
 
   if (missing(df)) {stop("Please provide a value for df")}
 
@@ -38,30 +38,20 @@ in_time_counter <- function(df,
 
   #if (missing(time_unit)) {stop("Please provide a value for time_unit. See '? seq.POSIXt' for valid values")}
 
-  ##### end of check #####
 
   patient_DT <- data.table::copy(df)
   data.table::setDT(patient_DT)
 
 
+   is.POSIXct <- function(x) inherits(x, "POSIXct")
 
-  admit_datetime <- eval(substitute(admit_datetime), patient_DT, parent.frame())
-  discharge_datetime <- eval(substitute(discharge_datetime), patient_DT, parent.frame())
-  identifier <- eval(substitute(identifier), patient_DT, parent.frame())
-  group_var <- eval(substitute(group_var), patient_DT, parent.frame())
+  if (patient_DT[, !is.POSIXct(get(admit_datetime))]) {
+    stop("The admit_datetime column must be POSIXct")
+  }
 
-
-
-
-  # is.POSIXct <- function(x) inherits(x, "POSIXct")
-  #
-  # if (patient_DT[, !is.POSIXct(admit_datetime)]) {
-  #   stop("The admit_datetime column must be POSIXct")
-  # }
-  #
-  # if (patient_DT[, !is.POSIXct(discharge_datetime)]) {
-  #   stop("The discharge_datetime column must be POSIXct")
-  # }
+  if (patient_DT[, !is.POSIXct(get(discharge_datetime))]) {
+    stop("The discharge_datetime column must be POSIXct")
+  }
 
 
   maxdate <- max(patient_DT[[discharge_datetime]],na.rm = TRUE)
