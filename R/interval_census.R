@@ -77,6 +77,9 @@ interval_census <- function(df,
     stop("The discharge column must be POSIXct")
   }
 
+
+  data.table::setkey(patient_DT)
+
  if (!is.null(timezone)) {
   patient_DT[[admit]] <- lubridate::force_tz(patient_DT[[admit]],  tzone = timezone)
  } else {
@@ -88,6 +91,8 @@ interval_census <- function(df,
   } else {
     patient_DT[[discharge]] <- lubridate::force_tz(patient_DT[[discharge]], tzone = 'UTC')
   }
+
+
 
   maxdate <- max(patient_DT[[discharge]], na.rm = TRUE)
 
