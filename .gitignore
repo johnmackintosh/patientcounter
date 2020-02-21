@@ -1,7 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
-
+*.csv
 ^patientcounter\.Rproj$
 ^\.Rproj\.user$
 

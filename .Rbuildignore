@@ -5,3 +5,5 @@
 
 ^\.travis\.yml$
 [.]xlsx$
+^.csv
+[.]csv$

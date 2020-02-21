@@ -5,8 +5,7 @@ Authors@R:
     person(given = "John",
            family = "MacKintosh",
            role = c("aut", "cre"),
-           email = "john.mackintosh@gmail.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           email = "john.mackintosh@gmail.com")
 Description: Fast, flexible census of patients in hospital locations during a 
     specified date range. Obtain net count of patients, accounting for those
     whose admissions may overlap your target date range.

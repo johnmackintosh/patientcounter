@@ -3,4 +3,6 @@
 export(in_time_counter)
 import(data.table)
 importFrom(lubridate,ceiling_date)
+importFrom(lubridate,date)
 importFrom(lubridate,floor_date)
+importFrom(lubridate,seconds)

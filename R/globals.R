@@ -1,8 +1,9 @@
 utils::globalVariables(
   c(
     ".",
-    "in_time",
+    "hour_beginning",
     "join_end",
-    "join_start"
+    "join_start",
+    'base_date'
   )
 )

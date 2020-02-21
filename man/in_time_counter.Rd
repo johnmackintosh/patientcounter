@@ -7,11 +7,12 @@
 in_time_counter(
   df,
   identifier,
-  admit_datetime,
-  discharge_datetime,
+  admit,
+  discharge,
   group_var,
   time_unit = "1 hour",
-  results = c("patient", "group", "total")
+  results = c("patient", "group", "total"),
+  uniques = TRUE
 )
 }
 \arguments{
@@ -19,9 +20,9 @@ in_time_counter(
 
 \item{identifier}{unique patient identifier}
 
-\item{admit_datetime}{datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss}
+\item{admit}{datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss}
 
-\item{discharge_datetime}{datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss}
+\item{discharge}{datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss}
 
 \item{group_var}{unique character vector to identify location/clinician at each move}
 
@@ -30,6 +31,13 @@ in_time_counter(
 \item{results}{patient returns one row per patient, groupvar and interval.
 group provides an overall grouped count of patients by the specified time interval.
 total returns the grand total of patients 'IN' by each unique time interval.}
+
+\item{uniques}{TRUE will only count patients once if they have more than one move
+during an interval. Use this to get a distinct count of patients per interval
+
+FALSE will count each patient move, so if a patient moves once during an interval there
+will be two rows for tha patient. This is useful if you want to count occupied beds,
+or a count of moves / transfers between departments}
 }
 \value{
 data.table showing identifier, group_var and count by relevant unit of time
