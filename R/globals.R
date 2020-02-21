@@ -1,7 +1,7 @@
 utils::globalVariables(
   c(
     ".",
-    "hour_beginning",
+    "interval_beginning",
     "join_end",
     "join_start",
     'base_date'
