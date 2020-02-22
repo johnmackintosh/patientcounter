@@ -11,8 +11,8 @@ Description: Fast, flexible census of patients in hospital locations during a
     whose admissions may overlap your target date range.
 License: GPL-3
 Encoding: UTF-8
-Depends: R (>= 2.10), data.table
-Imports: lubridate
+Depends: R (>= 2.10)
+Imports: data.table, lubridate
 LazyData: true
 URL: https://github.com/johnmackintosh/patientcounter
 BugReports: https://github.com/johnmackintosh/patientcounter/issues

@@ -28,14 +28,14 @@
 #'
 #'
 interval_census <- function(df,
-                             identifier,
-                             admit,
-                             discharge,
-                             group_var,
-                             time_unit = "1 hour",
-                             results = c("patient", "group", "total"),
-                             uniques = TRUE,
-                             timezone = NULL) {
+                            identifier,
+                            admit,
+                            discharge,
+                            group_var,
+                            time_unit = "1 hour",
+                            results = c("patient", "group", "total"),
+                            uniques = TRUE,
+                            timezone = NULL) {
   if (missing(df)) {
     stop("Please provide a value for df")
   }
@@ -62,41 +62,40 @@ interval_census <- function(df,
   #}
 
 
-  patient_DT <- data.table::copy(df)
-  data.table::setDT(patient_DT)
+  pat_DT <- copy(df)
+  setDT(pat_DT)
 
 
   is.POSIXct <- function(x)
     inherits(x, "POSIXct")
 
-  if (patient_DT[, !is.POSIXct(get(admit))]) {
+  if (pat_DT[, !is.POSIXct(get(admit))]) {
     stop("The admit column must be POSIXct")
   }
 
-  if (patient_DT[, !is.POSIXct(get(discharge))]) {
+  if (pat_DT[, !is.POSIXct(get(discharge))]) {
     stop("The discharge column must be POSIXct")
   }
 
 
-  data.table::setkey(patient_DT)
-
- if (!is.null(timezone)) {
-  patient_DT[[admit]] <- lubridate::force_tz(patient_DT[[admit]],  tzone = timezone)
- } else {
-   patient_DT[[admit]] <- lubridate::force_tz(patient_DT[[admit]], tzone = 'UTC')
- }
 
   if (!is.null(timezone)) {
-    patient_DT[[discharge]] <- lubridate::force_tz(patient_DT[[discharge]],  tzone = timezone)
+    pat_DT[[admit]] <- lubridate::force_tz(pat_DT[[admit]],  tzone = timezone)
   } else {
-    patient_DT[[discharge]] <- lubridate::force_tz(patient_DT[[discharge]], tzone = 'UTC')
+    pat_DT[[admit]] <- lubridate::force_tz(pat_DT[[admit]], tzone = 'UTC')
+  }
+
+  if (!is.null(timezone)) {
+    pat_DT[[discharge]] <- lubridate::force_tz(pat_DT[[discharge]],  tzone = timezone)
+  } else {
+    pat_DT[[discharge]] <- lubridate::force_tz(pat_DT[[discharge]], tzone = 'UTC')
   }
 
 
 
-  maxdate <- max(patient_DT[[discharge]], na.rm = TRUE)
+  maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
 
-  data.table::setnafill(patient_DT,
+  setnafill(pat_DT,
                         type = "const",
                         fill = maxdate,
                         cols = discharge)
@@ -104,18 +103,18 @@ interval_census <- function(df,
 
 
 
-  patient_DT[["join_start"]] <- lubridate::floor_date(patient_DT[[admit]],unit = time_unit)
-  patient_DT[["join_end"]] <- lubridate::floor_date(patient_DT[[discharge]],unit = time_unit)
+  pat_DT[["join_start"]] <- lubridate::floor_date(pat_DT[[admit]],unit = time_unit)
+  pat_DT[["join_end"]] <- lubridate::floor_date(pat_DT[[discharge]],unit = time_unit)
 
 
   pat_res <-
-    patient_DT[, .(interval_beginning = seq(join_start, join_end, by = time_unit)),
+    pat_DT[, .(interval_beginning = seq(join_start, join_end, by = time_unit)),
                by = .(
                  identifier = get(identifier),
                  group_var = get(group_var),
                  admit = get(admit),
                  discharge = get(discharge),
-                 ID = seq_len(nrow(patient_DT))
+                 ID = seq_len(nrow(pat_DT))
                )][order(interval_beginning)]
 
   pat_res[, base_date := lubridate::date(interval_beginning)
@@ -128,12 +127,11 @@ interval_census <- function(df,
     pat_res
   }
 
-  res <-  if (results == 'patient') {
+ if (results == 'patient') {
     pat_res
   } else if (results == 'group') {
     pat_res[, .N, .(interval_beginning, group_var, base_date)]
   } else {
     pat_res[, .N, .(interval_beginning, base_date)]
   }
-  return(res)
 }
