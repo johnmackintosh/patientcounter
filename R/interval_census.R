@@ -23,6 +23,7 @@
 #' @return data.table showing identifier, group_var and count by relevant unit of time
 #' @import data.table
 #' @importFrom lubridate floor_date ceiling_date seconds date force_tz
+#' @importFrom utils head tail
 #' @export
 #'
 #'
@@ -92,45 +93,47 @@ interval_census <- function(df,
   }
 
 
-
+# assign current max date to any admissions with no discharge date
   maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
-
-  setnafill(pat_DT,
-                        type = "const",
-                        fill = maxdate,
-                        cols = discharge)
-
-
+  setnafill(pat_DT, type = "const", fill = maxdate, cols = discharge)
 
 
   pat_DT[["join_start"]] <- lubridate::floor_date(pat_DT[[admit]],unit = time_unit)
-  pat_DT[["join_end"]] <- lubridate::floor_date(pat_DT[[discharge]],unit = time_unit)
+  pat_DT[["join_end"]] <- lubridate::ceiling_date(pat_DT[[discharge]],unit = time_unit)
 
 
-  pat_res <-
-    pat_DT[, .(interval_beginning = seq(join_start, join_end, by = time_unit)),
-               by = .(
-                 identifier = get(identifier),
-                 group_var = get(group_var),
-                 admit = get(admit),
-                 discharge = get(discharge),
-                 ID = seq_len(nrow(pat_DT))
-               )][order(interval_beginning)]
+  mindate <- min(pat_DT[["join_start"]],na.rm = TRUE)
+  maxdate <- max(pat_DT[["join_end"]],na.rm = TRUE)
 
-  pat_res[, base_date := lubridate::date(interval_beginning)
-          ][, discharge := discharge - seconds(1)
-            ][interval_beginning <= discharge,][]
 
-  pat_res <- if (uniques) {
-    unique(pat_res, by = c('identifier', 'interval_beginning'))
-  } else {
-    pat_res
-  }
+  ts <- seq(mindate,maxdate, by = time_unit)
+  ref <- data.table(join_start = head(ts, -1L), join_end = tail(ts, -1L),
+                    key = c("join_start", "join_end"))
+
+  setkey(pat_DT,join_start,join_end)
+  setkey(ref, join_start, join_end)
+
+
+  pat_res <- foverlaps(ref, pat_DT, nomatch = 0L, type = "within", mult = "all")
+
+  pat_res[,`:=`(base_date = lubridate::date(i.join_start),
+                interval_beginning = i.join_start,
+                 base_hour = lubridate::hour(i.join_start))][]
+
+
+
+ pat_res <- if (uniques) {
+   unique(pat_res, by = c(identifier,'i.join_start'))
+ } else {
+   pat_res
+ }
+
+
 
  if (results == 'patient') {
-    pat_res
+    pat_res[,]
   } else if (results == 'group') {
-    pat_res[, .N, .(interval_beginning, group_var, base_date)]
+    pat_res[, .N, .(interval_beginning, groupvar = get(group_var), base_date)]
   } else {
     pat_res[, .N, .(interval_beginning, base_date)]
   }

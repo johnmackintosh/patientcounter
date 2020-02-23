@@ -4,6 +4,7 @@ utils::globalVariables(
     "interval_beginning",
     "join_end",
     "join_start",
-    'base_date'
+    "base_date",
+    "i.join_start"
   )
 )
