@@ -32,11 +32,11 @@ interval_census <- function(df,
                             identifier,
                             admit,
                             discharge,
-                            group_var,
+                            group_var = NULL,
                             time_unit = "1 hour",
                             results = c("patient", "group", "total"),
                             uniques = TRUE,
-                            timezone = NULL) {
+                            timezone = Sys.timezone()) {
   if (missing(df)) {
     stop("Please provide a value for df")
   }
@@ -53,7 +53,7 @@ interval_census <- function(df,
     stop("Please provide a value for discharge")
   }
 
-  if (missing(group_var)) {
+  if (results == "group" & missing(group_var)) {
     stop("Please provide a value for the group_var column")
   }
 
@@ -65,6 +65,9 @@ interval_census <- function(df,
 
   pat_DT <- copy(df)
   setDT(pat_DT)
+
+  #pat_DT <- setnames(pat_DT, old = c(group_var), new = c("grp"),skip_absent = TRUE)
+
 
 
   is.POSIXct <- function(x)
@@ -93,6 +96,7 @@ interval_census <- function(df,
   }
 
 
+
 # assign current max date to any admissions with no discharge date
   maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
   setnafill(pat_DT, type = "const", fill = maxdate, cols = discharge)
@@ -103,8 +107,24 @@ interval_census <- function(df,
 
 
   mindate <- min(pat_DT[["join_start"]],na.rm = TRUE)
-  maxdate <- max(pat_DT[["join_end"]],na.rm = TRUE)
+  max_adm_date <- max(pat_DT[["join_start"]],na.rm = TRUE)
 
+  max_dis_date <- max(pat_DT[["join_end"]],na.rm = TRUE)
+
+  maxdate <- if (max_adm_date > max_dis_date) {
+  curr_time <- lubridate::ceiling_date(Sys.time(),time_unit)
+  if (lubridate::hour(curr_time) == 0) {
+    curr_time <- curr_time + lubridate::hours(1)
+  }
+  curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
+  maxdate <- curr_time
+  } else {
+    maxdate <- max_dis_date
+  }
+
+  if (max(pat_DT[["join_start"]],na.rm = TRUE) > max(pat_DT[["join_end"]],na.rm = TRUE)) {
+  pat_DT[join_start > join_end,join_end := maxdate]
+  }
 
   ts <- seq(mindate,maxdate, by = time_unit)
   ref <- data.table(join_start = head(ts, -1L), join_end = tail(ts, -1L),
@@ -131,10 +151,17 @@ interval_census <- function(df,
 
 
  if (results == 'patient') {
-    pat_res[,]
+   existing <- names(df)
+   newnames <- c(existing,'interval_beginning','base_hour')
+
+   pat_res[,.SD,.SDcols = newnames]
+
   } else if (results == 'group') {
-    pat_res[, .N, .(interval_beginning, groupvar = get(group_var), base_date)]
+    grp_pat_res <- pat_res[, .N, .(groupvar = get(group_var),interval_beginning, base_date,base_hour)]
+    setnames(grp_pat_res, old = 'groupvar',new = group_var,skip_absent = TRUE)
+    grp_pat_res
+
   } else {
-    pat_res[, .N, .(interval_beginning, base_date)]
+    pat_res[, .N, .(interval_beginning, base_date, base_hour)]
   }
 }

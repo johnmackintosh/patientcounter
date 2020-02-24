@@ -10,11 +10,11 @@ interval_census(
   identifier,
   admit,
   discharge,
-  group_var,
+  group_var = NULL,
   time_unit = "1 hour",
   results = c("patient", "group", "total"),
   uniques = TRUE,
-  timezone = NULL
+  timezone = Sys.timezone()
 )
 }
 \arguments{
