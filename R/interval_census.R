@@ -57,10 +57,9 @@ interval_census <- function(df,
     stop("Please provide a value for the group_var column")
   }
 
-
-  #if (missing(time_unit)) {
-  #stop("Please provide a value for time_unit. See '? seq.POSIXt' for valid values")
-  #}
+  if (results == "group" & uniques) {
+    stop("At group level, please change uniques to FALSE for accurate counts")
+  }
 
 
   pat_DT <- copy(df)
