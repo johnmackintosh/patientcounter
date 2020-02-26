@@ -11,16 +11,19 @@
 #' @param results patient returns one row per patient, groupvar and interval.
 #' group provides an overall grouped count of patients by the specified time interval.
 #' total returns the grand total of patients 'IN' by each unique time interval.
-#' @param uniques TRUE will only count patients once if they have more than one move
-#' during an interval. Use this to get a distinct count of patients per interval
+#' @param uniques TRUE will count patients once per interval, even if they have
+#' more than one entry per interval, for example, due to move to another location.
+#' Use this to get a *distinct* count of patients per interval
 #'
-#' FALSE will count each patient move, so if a patient moves once during an interval there
-#' will be two rows for tha patient. This is useful if you want to count occupied beds,
-#' or a count of moves / transfers between departments
+#' FALSE will count each patient entry per interval.
+#' If a patient moves during an interval there will be  at least two rows for
+#' that patient for that interval.
+#' This is useful if you want to count occupied beds,or a count of moves / transfers between departments
 #'
-#' @param timezone Your system timezone
+#' @return data.table showing identifier, group variable , and count by relevant unit of time
+#' Also includes the start / end of interval, plus the base date and base hour for
+#' convenient interactive filtering of the results
 #'
-#' @return data.table showing identifier, group_var and count by relevant unit of time
 #' @import data.table
 #' @importFrom lubridate floor_date ceiling_date seconds date force_tz
 #' @importFrom utils head tail
@@ -35,8 +38,7 @@ interval_census <- function(df,
                             group_var = NULL,
                             time_unit = "1 hour",
                             results = c("patient", "group", "total"),
-                            uniques = TRUE,
-                            timezone = Sys.timezone()) {
+                            uniques = TRUE) {
   if (missing(df)) {
     stop("Please provide a value for df")
   }
@@ -62,11 +64,12 @@ interval_census <- function(df,
   }
 
 
+  if (results == c("patient", "group", "total")) {
+    stop('Please select ONE option for results')
+  }
+
   pat_DT <- copy(df)
   setDT(pat_DT)
-
-  #pat_DT <- setnames(pat_DT, old = c(group_var), new = c("grp"),skip_absent = TRUE)
-
 
 
   is.POSIXct <- function(x)
@@ -79,21 +82,6 @@ interval_census <- function(df,
   if (pat_DT[, !is.POSIXct(get(discharge))]) {
     stop("The discharge column must be POSIXct")
   }
-
-
-
-  if (!is.null(timezone)) {
-    pat_DT[[admit]] <- lubridate::force_tz(pat_DT[[admit]],  tzone = timezone)
-  } else {
-    pat_DT[[admit]] <- lubridate::force_tz(pat_DT[[admit]], tzone = 'UTC')
-  }
-
-  if (!is.null(timezone)) {
-    pat_DT[[discharge]] <- lubridate::force_tz(pat_DT[[discharge]],  tzone = timezone)
-  } else {
-    pat_DT[[discharge]] <- lubridate::force_tz(pat_DT[[discharge]], tzone = 'UTC')
-  }
-
 
 
 # assign current max date to any admissions with no discharge date
@@ -115,7 +103,8 @@ interval_census <- function(df,
   if (lubridate::hour(curr_time) == 0) {
     curr_time <- curr_time + lubridate::hours(1)
   }
-  curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
+  #curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
+  curr_time <- lubridate::ymd_hms(curr_time)
   maxdate <- curr_time
   } else {
     maxdate <- max_dis_date
@@ -135,9 +124,10 @@ interval_census <- function(df,
 
   pat_res <- foverlaps(ref, pat_DT, nomatch = 0L, type = "within", mult = "all")
 
-  pat_res[,`:=`(base_date = lubridate::date(i.join_start),
-                interval_beginning = i.join_start,
-                 base_hour = lubridate::hour(i.join_start))][]
+  pat_res[,`:=`(interval_beginning = i.join_start,
+                interval_end = i.join_end,
+                base_date = lubridate::date(i.join_start),
+                base_hour = lubridate::hour(i.join_start))][]
 
 
 
@@ -147,11 +137,10 @@ interval_census <- function(df,
    pat_res
  }
 
-
-
  if (results == 'patient') {
    existing <- names(df)
-   newnames <- c(existing,'interval_beginning','base_hour')
+   newnames <- c(existing,'interval_beginning','interval_end',
+                 'base_date','base_hour')
 
    pat_res[,.SD,.SDcols = newnames]
 

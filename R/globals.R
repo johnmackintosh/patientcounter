@@ -6,6 +6,7 @@ utils::globalVariables(
     "join_start",
     "base_date",
     "base_hour",
-    "i.join_start"
+    "i.join_start",
+    "i.join_end"
   )
 )

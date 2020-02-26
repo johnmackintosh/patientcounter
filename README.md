@@ -23,11 +23,10 @@ patient count <- interval_census(df = my_df,
 identifier = 'patient_code_number',
 admit = 'admission_date', 
 discharge = 'discharge_date', 
-group_var = 'session_id', 
+group_var = 'location_id', 
 time_unit = '1 hour', 
 results = "total", 
-uniques = TRUE,
-timezone = "Europe/London")
+uniques = TRUE)
 
 ```
 
@@ -51,10 +50,10 @@ Remember this will also be influenced by the 'uniques' argument.
 This will result in double counting of some patients who occupy beds in different locations during each interval
 
 
-## Timezone
+## Timezones
 
-- To ensure the results match your current locale, you must specify your timezone.  
-In the UK this will be "Europe/London"  
+- EVerything is easier if you use "UTC" by default. 
+You can attempt to coerce the final results yourself using lubridate::force_tz()  
 
 To find your system timezone:
 

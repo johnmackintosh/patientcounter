@@ -13,8 +13,7 @@ interval_census(
   group_var = NULL,
   time_unit = "1 hour",
   results = c("patient", "group", "total"),
-  uniques = TRUE,
-  timezone = Sys.timezone()
+  uniques = TRUE
 )
 }
 \arguments{
@@ -34,17 +33,19 @@ interval_census(
 group provides an overall grouped count of patients by the specified time interval.
 total returns the grand total of patients 'IN' by each unique time interval.}
 
-\item{uniques}{TRUE will only count patients once if they have more than one move
-during an interval. Use this to get a distinct count of patients per interval
+\item{uniques}{TRUE will count patients once per interval, even if they have
+more than one entry per interval, for example, due to move to another location.
+Use this to get a *distinct* count of patients per interval
 
-FALSE will count each patient move, so if a patient moves once during an interval there
-will be two rows for tha patient. This is useful if you want to count occupied beds,
-or a count of moves / transfers between departments}
-
-\item{timezone}{Your system timezone}
+FALSE will count each patient entry per interval.
+If a patient moves during an interval there will be  at least two rows for
+that patient for that interval.
+This is useful if you want to count occupied beds,or a count of moves / transfers between departments}
 }
 \value{
-data.table showing identifier, group_var and count by relevant unit of time
+data.table showing identifier, group variable , and count by relevant unit of time
+Also includes the start / end of interval, plus the base date and base hour for
+convenient interactive filtering of the results
 }
 \description{
 interval_census
