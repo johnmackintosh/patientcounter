@@ -51,3 +51,13 @@ convenient interactive filtering of the results
 interval_census
 A census of the number of patients , or moves/ transfers, by interval
 }
+\examples{
+\donttest{
+interval_census(admit_extract, indentifier ="pat_id", admit = "admit_date",
+discharge = "discharge_date", group_var ="location",
+time_unit = "1 hour", results = "patient",
+uniques = TRUE)
+}
+
+
+}

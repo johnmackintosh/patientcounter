@@ -29,6 +29,13 @@
 #' @importFrom utils head tail
 #' @export
 #'
+#' @examples
+#' \donttest{
+#'interval_census(admit_extract, indentifier ="pat_id", admit = "admit_date",
+#'discharge = "discharge_date", group_var ="location",
+#'time_unit = "1 hour", results = "patient",
+#'uniques = TRUE)
+#' }
 #'
 #'
 interval_census <- function(df,
