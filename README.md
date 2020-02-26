@@ -4,6 +4,13 @@
 
 [![Build Status](https://travis-ci.com/johnmackintosh/patientcounter.svg?branch=master)](https://travis-ci.com/johnmackintosh/patientcounter)
 
+
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patientcounter?branch=master&svg=true)](https://ci.appveyor.com/project/johnmackintosh/patientcounter)
+
+
+
+
+
 How many patients were in the hospital at 10 AM yesterday?  
 How many were in during each 15 minute spell between 2pm and 6pm?  
 How many were in during the last week, by hour?

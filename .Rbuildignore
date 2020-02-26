@@ -7,3 +7,4 @@
 [.]xlsx$
 ^.csv
 [.]csv$
+^appveyor\.yml$
