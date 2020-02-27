@@ -71,9 +71,9 @@ interval_census <- function(df,
   }
 
 
-  if (results == c("patient", "group", "total")) {
-    stop('Please select ONE option for results')
-  }
+  #if (results == c("patient", "group", "total")) {
+ #   stop('Please select ONE option for results')
+  #}
 
   pat_DT <- copy(df)
   setDT(pat_DT)
