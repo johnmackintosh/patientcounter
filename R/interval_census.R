@@ -66,14 +66,24 @@ interval_census <- function(df,
     stop("Please provide a value for the group_var column")
   }
 
+  if (results == "grp" ) {
+    stop('"Please check the value provided to the "results" argument.
+         Do you mean "group"?"', call. = FALSE)
+  }
+
+
   if (results == "group" & uniques) {
     stop("At group level, please change uniques to FALSE for accurate counts")
   }
 
 
-  #if (results == c("patient", "group", "total")) {
- #   stop('Please select ONE option for results')
-  #}
+
+
+  if (length(results) > 1)  {
+    stop('"Too many values passed to "results" argument.
+         Please set results to one of "patient", "group", or "total"',
+         call. = FALSE)
+  }
 
   pat_DT <- copy(df)
   setDT(pat_DT)
@@ -91,7 +101,7 @@ interval_census <- function(df,
   }
 
 
-# assign current max date to any admissions with no discharge date
+  # assign current max date to any admissions with no discharge date
   maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
   setnafill(pat_DT, type = "const", fill = maxdate, cols = discharge)
 
@@ -106,19 +116,19 @@ interval_census <- function(df,
   max_dis_date <- max(pat_DT[["join_end"]],na.rm = TRUE)
 
   maxdate <- if (max_adm_date > max_dis_date) {
-  curr_time <- lubridate::ceiling_date(Sys.time(),time_unit)
-  if (lubridate::hour(curr_time) == 0) {
-    curr_time <- curr_time + lubridate::hours(1)
-  }
-  #curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
-  curr_time <- lubridate::ymd_hms(curr_time)
-  maxdate <- curr_time
+    curr_time <- lubridate::ceiling_date(Sys.time(),time_unit)
+    if (lubridate::hour(curr_time) == 0) {
+      curr_time <- curr_time + lubridate::hours(1)
+    }
+    #curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
+    curr_time <- lubridate::ymd_hms(curr_time)
+    maxdate <- curr_time
   } else {
     maxdate <- max_dis_date
   }
 
   if (max(pat_DT[["join_start"]],na.rm = TRUE) > max(pat_DT[["join_end"]],na.rm = TRUE)) {
-  pat_DT[join_start > join_end,join_end := maxdate]
+    pat_DT[join_start > join_end,join_end := maxdate]
   }
 
   ts <- seq(mindate,maxdate, by = time_unit)
@@ -138,18 +148,18 @@ interval_census <- function(df,
 
 
 
- pat_res <- if (uniques) {
-   unique(pat_res, by = c(identifier,'i.join_start'))
- } else {
-   pat_res
- }
+  pat_res <- if (uniques) {
+    unique(pat_res, by = c(identifier,'i.join_start'))
+  } else {
+    pat_res
+  }
 
- if (results == 'patient') {
-   existing <- names(df)
-   newnames <- c(existing,'interval_beginning','interval_end',
-                 'base_date','base_hour')
+  if (results == 'patient') {
+    existing <- names(df)
+    newnames <- c(existing,'interval_beginning','interval_end',
+                  'base_date','base_hour')
 
-   pat_res[,.SD,.SDcols = newnames]
+    pat_res[,.SD,.SDcols = newnames]
 
   } else if (results == 'group') {
     grp_pat_res <- pat_res[, .N, .(groupvar = get(group_var),interval_beginning, base_date,base_hour)]

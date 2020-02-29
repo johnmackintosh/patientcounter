@@ -8,19 +8,16 @@
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patientcounter?branch=master&svg=true)](https://ci.appveyor.com/project/johnmackintosh/patientcounter)
 
 
-
-
-
 How many patients were in the hospital at 10 AM yesterday?  
 How many were in during each 15 minute spell between 2pm and 6pm?  
 How many were in during the last week, by hour?
 
-How many patients were admitted by hour? And discharged? What was the net value? By Half hour?
 
+This package aims to make answering these questions easier and quicker.
 
-This package aims to make answering these questions easier and quicker.  
+No SQL? No problem!
 
-No SQL required! 
+If you have time in, time out, a unique patient identifier, and optionally, a grouping variable to track moves between departments, this package will tell you how many patients were 'IN' at any time.
 
 
 ## Example
@@ -38,8 +35,6 @@ uniques = TRUE)
 ```
 
 
-
-
 ## General Help
 
 - You must 'quote' your variables, for the time being at least..  
@@ -54,7 +49,7 @@ Remember this will also be influenced by the 'uniques' argument.
 ## Uniques
 - To count patients, leave 'uniques' at the default value of 'TRUE'.  
 - To count patient moves between locations during intervals, set uniques to 'FALSE'. 
-This will result in double counting of some patients who occupy beds in different locations during each interval
+This will ensure patients who occupy beds in different locations during each interval are accounted for.
 
 
 ## Timezones
