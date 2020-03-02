@@ -7,6 +7,9 @@
 
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patientcounter?branch=master&svg=true)](https://ci.appveyor.com/project/johnmackintosh/patientcounter)
 
+[![codecov](https://codecov.io/gh/johnmackintosh/patientcounter/branch/master/graph/badge.svg)](https://codecov.io/gh/johnmackintosh/patientcounter)
+
+
 
 How many patients were in the hospital at 10 AM yesterday?  
 How many were in during each 15 minute spell between 2pm and 6pm?  
