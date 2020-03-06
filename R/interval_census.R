@@ -27,7 +27,7 @@
 #' convenient interactive filtering of the results
 #'
 #' @import data.table
-#' @importFrom lubridate floor_date ceiling_date seconds date force_tz
+#' @importFrom lubridate floor_date ceiling_date seconds minutes date force_tz
 #' @importFrom utils head tail
 #' @export
 #'
