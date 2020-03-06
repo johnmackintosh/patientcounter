@@ -12,6 +12,8 @@ interval_census(
   discharge,
   group_var = NULL,
   time_unit = "1 hour",
+  time_adjust_period = NULL,
+  time_adjust_value = NULL,
   results = c("patient", "group", "total"),
   uniques = TRUE
 )
@@ -28,6 +30,10 @@ interval_census(
 \item{group_var}{unique character vector to identify location/clinician at each move}
 
 \item{time_unit}{character string to denote time intervals to count by e.g. "1 hour", "15 mins"}
+
+\item{time_adjust_period}{"start_sec","start_min","end_sec","end_min"}
+
+\item{time_adjust_value}{integer to adjust the start / end of each period in minutes or seconds}
 
 \item{results}{patient returns one row per patient, groupvar and interval.
 group provides an overall grouped count of patients by the specified time interval.
