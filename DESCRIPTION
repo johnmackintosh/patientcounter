@@ -1,11 +1,11 @@
 Package: patientcounter
-Title: Counts patients quickly
+Title: Counts Patients Quickly
 Version: 0.0.0.9003
 Authors@R: 
     person(given = "John",
            family = "MacKintosh",
            role = c("aut", "cre"),
-           email = "john.mackintosh@gmail.com")
+           email = "johnmackintosh.jm@gmail.com")
 Description: Fast, flexible census of patients in hospital locations during a 
     specified date range. Obtain net count of patients, accounting for those
     whose admissions may overlap your target date range.

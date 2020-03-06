@@ -1,12 +1,1 @@
-utils::globalVariables(
-  c(
-    ".",
-    "interval_beginning",
-    "join_end",
-    "join_start",
-    "base_date",
-    "base_hour",
-    "i.join_start",
-    "i.join_end"
-  )
-)
+utils::globalVariables(c("."))

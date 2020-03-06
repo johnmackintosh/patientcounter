@@ -8,6 +8,8 @@
 #' @param discharge datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss
 #' @param group_var unique character vector to identify location/clinician at each move
 #' @param time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
+#' @param time_adjust_period "start_sec","start_min","end_sec","end_min"
+#' @param time_adjust_value integer to adjust the start / end of each period in minutes or seconds
 #' @param results patient returns one row per patient, groupvar and interval.
 #' group provides an overall grouped count of patients by the specified time interval.
 #' total returns the grand total of patients 'IN' by each unique time interval.
@@ -44,8 +46,19 @@ interval_census <- function(df,
                             discharge,
                             group_var = NULL,
                             time_unit = "1 hour",
+                            time_adjust_period = NULL, #"start_sec","start_min","end_sec","end_min"
+                            time_adjust_value = NULL,
                             results = c("patient", "group", "total"),
                             uniques = TRUE) {
+
+
+# global variables
+  interval_beginning <- interval_end <- NULL
+  join_end <- join_start <- NULL
+  base_date <- base_hour <- NULL
+  i.join_start <- i.join_end <- NULL
+
+
   if (missing(df)) {
     stop("Please provide a value for df")
   }
@@ -77,12 +90,25 @@ interval_census <- function(df,
   }
 
 
-
-
   if (length(results) > 1)  {
     stop('"Too many values passed to "results" argument.
          Please set results to one of "patient", "group", or "total"',
          call. = FALSE)
+  }
+
+
+  if (!is.null(time_adjust_period) & length(time_adjust_period) > 1)  {
+    stop('"Too many values passed to "time_adjust_period" argument.
+         Please set time_adjust_period to one of "start_sec","start_min","end_sec" or "end_min"',
+         call. = FALSE)
+  }
+
+  if (!is.null(time_adjust_period) & is.null(time_adjust_value))  {
+    stop('"Please provide a value for the time_adjust argument"', call. = FALSE)
+  }
+
+  if (!is.numeric(time_adjust_value)) {
+    stop("time_adjust_value should be numeric, not a string")
   }
 
   pat_DT <- copy(df)
@@ -98,6 +124,13 @@ interval_census <- function(df,
 
   if (pat_DT[, !is.POSIXct(get(discharge))]) {
     stop("The discharge column must be POSIXct")
+  }
+
+
+  .confounding <- pat_DT[get(admit) == get(discharge),.N]
+  if (.confounding > 0) {
+    warning(paste0('There were ',.confounding,' ', 'records with identical admission and discharge date times.
+                   These records have been ignored in the analysis'))
   }
 
 
@@ -132,8 +165,56 @@ interval_census <- function(df,
   }
 
   ts <- seq(mindate,maxdate, by = time_unit)
+
   ref <- data.table(join_start = head(ts, -1L), join_end = tail(ts, -1L),
                     key = c("join_start", "join_end"))
+
+  # check for final adjustments
+
+
+  if (!is.null(time_adjust_period)) {
+
+    if (time_adjust_period == 'start_sec') {
+
+      pat_DT[,join_start := join_start + lubridate::seconds(time_adjust_value)]
+      ref[,join_start := join_start + lubridate::seconds(time_adjust_value)]
+
+
+    } else if (time_adjust_period == 'start_min') {
+
+      pat_DT[,join_start := join_start + lubridate::minutes(time_adjust_value)][]
+
+      ref[,join_start := join_start + lubridate::minutes(time_adjust_value)][]
+
+    } else if (time_adjust_period == 'end_sec') {
+
+      pat_DT[,join_end := join_end - lubridate::seconds(time_adjust_value)][]
+      ref[,join_end := join_end - lubridate::seconds(time_adjust_value)][]
+
+    } else if (time_adjust_period == "end_min") {
+
+      pat_DT[,join_end := join_end - lubridate::minutes(time_adjust_value)][]
+      ref[,join_end := join_end - lubridate::minutes(time_adjust_value)][]
+    }
+
+  }
+
+  out_of_zone <- ref[join_start > join_end,.N][]
+  .bad_dates <- ref[join_start > join_end,]
+  setnames(.bad_dates,
+           old = c("join_start","join_end"),
+           new = c("interval_beginning","interval_end"),
+           skip_absent = TRUE)
+
+  if (out_of_zone >= 1) {
+    warning(paste0(out_of_zone,' ', "date(s) span(s) timezone changes and has / have been identified"))
+    print(.bad_dates)
+  }
+
+
+  pat_DT <- pat_DT[join_start < join_end,][]
+   ref <- ref[join_start < join_end,][]
+
 
   setkey(pat_DT,join_start,join_end)
   setkey(ref, join_start, join_end)
@@ -141,32 +222,47 @@ interval_census <- function(df,
 
   pat_res <- foverlaps(ref, pat_DT, nomatch = 0L, type = "within", mult = "all")
 
-  pat_res[,`:=`(interval_beginning = i.join_start,
-                interval_end = i.join_end,
-                base_date = lubridate::date(i.join_start),
-                base_hour = lubridate::hour(i.join_start))][]
+  .oldnames <-  c("i.join_start","i.join_end")
+  .newnames <-  c("interval_beginning","interval_end")
+  setnames(pat_res,
+           old = .oldnames,
+           new = .newnames,
+           skip_absent = TRUE)
 
+  pat_res[, `:=`(base_date = data.table::as.IDate(interval_beginning),
+                 base_hour = data.table::hour(interval_beginning))][]
+
+
+
+  pat_res[, `:=`(base_date = data.table::as.IDate(interval_beginning),
+                 base_hour = data.table::hour(interval_beginning))][]
+
+  pat_res[, c('join_start','join_end') := NULL]
 
 
   pat_res <- if (uniques) {
-    unique(pat_res, by = c(identifier,'i.join_start'))
-  } else {
+    unique(pat_res, by = c(identifier, "interval_beginning"))
+  }else {
     pat_res
   }
 
-  if (results == 'patient') {
+  pat_res <-  if (results == "patient") {
     existing <- names(df)
-    newnames <- c(existing,'interval_beginning','interval_end',
-                  'base_date','base_hour')
+    newnames <- c(existing, "interval_beginning", "interval_end",
+                  "base_date", "base_hour")
+    pat_res[, .SD, .SDcols = newnames][]
+    return(pat_res)
 
-    pat_res[,.SD,.SDcols = newnames]
+  } else if (results == "group") {
 
-  } else if (results == 'group') {
-    grp_pat_res <- pat_res[, .N, .(groupvar = get(group_var),interval_beginning, base_date,base_hour)]
-    setnames(grp_pat_res, old = 'groupvar',new = group_var,skip_absent = TRUE)
-    grp_pat_res
+    pat_res <- pat_res[, .N, .(groupvar = get(group_var),
+                               interval_beginning, interval_end, base_date, base_hour)][]
+    setnames(pat_res, old = "groupvar", new = group_var, skip_absent = TRUE)
+    return(pat_res)
 
   } else {
-    pat_res[, .N, .(interval_beginning, base_date, base_hour)]
+
+    pat_res <-  pat_res[, .N, .(interval_beginning,interval_end, base_date, base_hour)][]
+    pat_res
   }
 }
