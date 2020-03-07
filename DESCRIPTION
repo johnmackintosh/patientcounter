@@ -6,9 +6,13 @@ Authors@R:
            family = "MacKintosh",
            role = c("aut", "cre"),
            email = "johnmackintosh.jm@gmail.com")
-Description: Fast, flexible census of patients in hospital locations during a 
-    specified date range. Obtain net count of patients, accounting for those
-    whose admissions may overlap your target date range.
+Description: Fast, flexible census of patient occupancy in multiple locations in 
+    hospital setting.  Obtain net count of patients, accounting for
+    those admitted before and not yet discharged. 
+    Typically, this requires a database and knowledge of SQL. 
+    This package allows anyone who has time in, time out, unique identifiers, 
+    and an optional grouping variable, to accurately determine how many patients 
+    were occupying beds, at any time of day and granularity.
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 2.10)

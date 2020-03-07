@@ -107,7 +107,7 @@ interval_census <- function(df,
     stop('"Please provide a value for the time_adjust argument"', call. = FALSE)
   }
 
-  if (!is.numeric(time_adjust_value)) {
+  if (!is.null(time_adjust_period) & !is.numeric(time_adjust_value)) {
     stop("time_adjust_value should be numeric, not a string")
   }
 

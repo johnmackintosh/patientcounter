@@ -38,6 +38,17 @@ uniques = TRUE)
 ```
 
 
+## Installation
+
+The package is not on CRAN yet, so install from github with the 'remotes' package
+
+```r
+install.packages("remotes") # if not already installed
+remotes::install_github("johnmackintosh/patientcounter")
+
+```
+
+
 ## General Help
 
 - You must 'quote' your variables, for the time being at least..  
@@ -57,7 +68,7 @@ This will ensure patients who occupy beds in different locations during each int
 
 ## Timezones
 
-- EVerything is easier if you use "UTC" by default. 
+- Everything is easier if you use "UTC" by default. 
 You can attempt to coerce the final results yourself using lubridate::force_tz()  
 
 To find your system timezone:
@@ -71,6 +82,20 @@ Sys.timezone()
 
 See ```r'? seq.POSIXt'``` for valid values
 
-E.G. '1 hour', '15 mins'
+E.G. '1 hour', '15 mins', '30 mins'
+
+
+## Time Adjust
+
+Want to count those in between 10:01 to 11:00? 
+You can do that using 'time_adjust_period' - set it to 'start_min' and then set
+'time_adjust_interval' to 1.
+
+
+10:00 to 10:59?  
+Yes, that's possible as well - set 'time_adjust_period' to 'end_min' and set 
+'time_adjust_interval' as before. You can set these periods to any value, as long
+as it makes sense in relation to your chosen time_unit.
+
 
 
