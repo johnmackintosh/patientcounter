@@ -1,6 +1,6 @@
 Package: patientcounter
 Title: Counts Patients Quickly
-Version: 0.0.0.9003
+Version: 0.1.0
 Authors@R: 
     person(given = "John",
            family = "MacKintosh",
