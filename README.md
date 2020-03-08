@@ -26,7 +26,7 @@ If you have time in, time out, a unique patient identifier, and optionally, a gr
 ## Example
 
 ```r
-patient count <- interval_census(df = my_df, 
+patient_count <- interval_census(df = my_df, 
 identifier = 'patient_code_number',
 admit = 'admission_date', 
 discharge = 'discharge_date', 
