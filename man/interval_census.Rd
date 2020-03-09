@@ -35,9 +35,11 @@ interval_census(
 
 \item{time_adjust_value}{integer to adjust the start / end of each period in minutes or seconds}
 
-\item{results}{patient returns one row per patient, groupvar and interval.
-group provides an overall grouped count of patients by the specified time interval.
-total returns the grand total of patients 'IN' by each unique time interval.}
+\item{results}{'patient' returns one row per patient, groupvar and interval.
+
+'group' provides an overall grouped count of patients by the specified time interval.
+
+'total' returns the grand total of patients 'IN' by each unique time interval.}
 
 \item{uniques}{TRUE will count patients once per interval, even if they have
 more than one entry per interval, for example, due to move to another location.

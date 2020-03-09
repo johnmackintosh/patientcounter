@@ -10,9 +10,11 @@
 #' @param time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
 #' @param time_adjust_period "start_sec","start_min","end_sec","end_min"
 #' @param time_adjust_value integer to adjust the start / end of each period in minutes or seconds
-#' @param results patient returns one row per patient, groupvar and interval.
-#' group provides an overall grouped count of patients by the specified time interval.
-#' total returns the grand total of patients 'IN' by each unique time interval.
+#' @param results 'patient' returns one row per patient, groupvar and interval.
+#'
+#' 'group' provides an overall grouped count of patients by the specified time interval.
+#'
+#' 'total' returns the grand total of patients 'IN' by each unique time interval.
 #' @param uniques TRUE will count patients once per interval, even if they have
 #' more than one entry per interval, for example, due to move to another location.
 #' Use this to get a *distinct* count of patients per interval
@@ -52,7 +54,7 @@ interval_census <- function(df,
                             uniques = TRUE) {
 
 
-# global variables
+  # global variables
   interval_beginning <- interval_end <- NULL
   join_end <- join_start <- NULL
   base_date <- base_hour <- NULL
@@ -74,6 +76,7 @@ interval_census <- function(df,
   if (missing(discharge)) {
     stop("Please provide a value for discharge")
   }
+
 
   if (results == "group" & missing(group_var)) {
     stop("Please provide a value for the group_var column")
@@ -132,6 +135,12 @@ interval_census <- function(df,
     warning(paste0('There were ',.confounding,' ', 'records with identical admission and discharge date times.
                    These records have been ignored in the analysis'))
   }
+
+
+  if (all(is.na(pat_DT[[discharge]]))) {
+    stop("Please ensure at least one row has a discharge datetime")
+  }
+
 
 
   # assign current max date to any admissions with no discharge date
@@ -213,7 +222,7 @@ interval_census <- function(df,
 
 
   pat_DT <- pat_DT[join_start < join_end,][]
-   ref <- ref[join_start < join_end,][]
+  ref <- ref[join_start < join_end,][]
 
 
   setkey(pat_DT,join_start,join_end)
