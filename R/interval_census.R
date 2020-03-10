@@ -35,10 +35,16 @@
 #'
 #' @examples
 #' \donttest{
-#'interval_census(admit_extract, indentifier ="pat_id", admit = "admit_date",
-#'discharge = "discharge_date", group_var ="location",
-#'time_unit = "1 hour", results = "patient",
-#'uniques = TRUE)
+#'interval_census(beds, identifier ="patient", admit = "start_time",
+#'discharge = "end_time", time_unit = "1 hour",results = "total")
+#'
+#'interval_census(beds, identifier ="patient", admit = "start_time",
+#'discharge = "end_time", time_unit = "1 hour",results = "patient")
+#'
+#'interval_census(beds, identifier ="patient", admit = "start_time",
+#'discharge = "end_time", group_var = "bed",
+#'time_unit = "1 hour", results = "group", uniques= FALSE)
+#'
 #' }
 #'
 #'
@@ -58,6 +64,7 @@ interval_census <- function(df,
   interval_beginning <- interval_end <- NULL
   join_end <- join_start <- NULL
   base_date <- base_hour <- NULL
+  curr_time <- NULL
   i.join_start <- i.join_end <- NULL
 
 
@@ -137,15 +144,24 @@ interval_census <- function(df,
   }
 
 
-  if (all(is.na(pat_DT[[discharge]]))) {
-    stop("Please ensure at least one row has a discharge datetime")
+  curr_time <- lubridate::ceiling_date(Sys.time(),time_unit)
+  if (lubridate::hour(curr_time) == 0) {
+    curr_time <- curr_time + lubridate::hours(1)
   }
+  curr_time <- lubridate::ymd_hms(curr_time)
 
 
 
-  # assign current max date to any admissions with no discharge date
-  maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
-  setnafill(pat_DT, type = "const", fill = maxdate, cols = discharge)
+
+  if (all(is.na(pat_DT[[discharge]]))) {
+    #stop("Please ensure at least one row has a discharge datetime")
+    setnafill(pat_DT, type = "const", fill = curr_time, cols = discharge)
+  } else {
+
+    # assign current max date to any admissions with no discharge date
+    maxdate <- max(pat_DT[[discharge]], na.rm = TRUE)
+    setnafill(pat_DT, type = "const", fill = maxdate, cols = discharge)
+  }
 
 
   pat_DT[["join_start"]] <- lubridate::floor_date(pat_DT[[admit]],unit = time_unit)
@@ -158,12 +174,7 @@ interval_census <- function(df,
   max_dis_date <- max(pat_DT[["join_end"]],na.rm = TRUE)
 
   maxdate <- if (max_adm_date > max_dis_date) {
-    curr_time <- lubridate::ceiling_date(Sys.time(),time_unit)
-    if (lubridate::hour(curr_time) == 0) {
-      curr_time <- curr_time + lubridate::hours(1)
-    }
-    #curr_time <- lubridate::ymd_hms(curr_time,tz = timezone)
-    curr_time <- lubridate::ymd_hms(curr_time)
+
     maxdate <- curr_time
   } else {
     maxdate <- max_dis_date

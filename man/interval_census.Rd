@@ -61,10 +61,16 @@ A census of the number of patients , or moves/ transfers, by interval
 }
 \examples{
 \donttest{
-interval_census(admit_extract, indentifier ="pat_id", admit = "admit_date",
-discharge = "discharge_date", group_var ="location",
-time_unit = "1 hour", results = "patient",
-uniques = TRUE)
+interval_census(beds, identifier ="patient", admit = "start_time",
+discharge = "end_time", time_unit = "1 hour",results = "total")
+
+interval_census(beds, identifier ="patient", admit = "start_time",
+discharge = "end_time", time_unit = "1 hour",results = "patient")
+
+interval_census(beds, identifier ="patient", admit = "start_time",
+discharge = "end_time", group_var = "bed",
+time_unit = "1 hour", results = "group", uniques= FALSE)
+
 }
 
 
