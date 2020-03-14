@@ -169,3 +169,69 @@ test_that("grouped result defined incorrectly throws error", {
 
 })
 
+
+test_that("time_adjust_period with no time_adjust throws error", {
+
+  # uniques  = TRUE when grouped results requested
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              time_adjust_period = 'start_sec',
+                              time_adjust_value = NULL,
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
+
+
+
+
+
+test_that("non numeric time_adjust throws error", {
+
+  # uniques  = TRUE when grouped results requested
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              time_adjust_period = 'start_sec',
+                              time_adjust_value = '1',
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
+
+
+
+test_that("multiple time_adjust periods throw error", {
+
+  # uniques  = TRUE when grouped results requested
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              time_adjust_period = c('start_sec','start_min'),
+                              time_adjust_value = 1,
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
