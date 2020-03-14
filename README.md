@@ -9,7 +9,9 @@
 
 [![codecov](https://codecov.io/gh/johnmackintosh/patientcounter/branch/master/graph/badge.svg)](https://codecov.io/gh/johnmackintosh/patientcounter)
 
+[![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/johnmackintosh/patientcounter)
 
+[![](https://img.shields.io/github/last-commit/johnmackintosh/patientcounter.svg)](https://github.com/johnmackintosh/patientcounter/commits/master)
 
 How many patients were in the hospital at 10 AM yesterday?  
 How many were in during each 15 minute spell between 2pm and 6pm?  
