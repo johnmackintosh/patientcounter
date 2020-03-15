@@ -3,14 +3,14 @@ test_that(" more than one results argument throws error", {
   # more than one argument for `results`
 
 
-  expect_that(interval_census(admit_extract,
+  expect_that(interval_census(df = admit_extract,
                               identifier = "pat_id",
                               admit = "admit_date",
                               discharge = "discharge_date",
                               group_var = "location",
                               time_unit = "1 hour",
-                              results = c("patient", "group", "total"),
-                              uniques = TRUE),
+                              results = c('total','patient'),
+                              uniques = FALSE),
               throws_error())
 
 
@@ -235,3 +235,41 @@ test_that("multiple time_adjust periods throw error", {
 
 
 })
+
+
+test_that("non datetime admit column throws error", {
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "bed",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
+
+
+
+test_that("non datetime discharge column throws error", {
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'bed',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
+
+
+

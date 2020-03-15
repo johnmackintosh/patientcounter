@@ -84,6 +84,12 @@ interval_census <- function(df,
     stop("Please provide a value for discharge")
   }
 
+  if (length(results) > 1)  {
+    stop('"Too many values passed to "results" argument.
+         Please set results to one of "patient", "group", or "total"',
+         call. = FALSE)
+  }
+
 
   if (results == "group" & missing(group_var)) {
     stop("Please provide a value for the group_var column")
@@ -97,13 +103,6 @@ interval_census <- function(df,
 
   if (results == "group" & uniques) {
     stop("At group level, please change uniques to FALSE for accurate counts")
-  }
-
-
-  if (length(results) > 1)  {
-    stop('"Too many values passed to "results" argument.
-         Please set results to one of "patient", "group", or "total"',
-         call. = FALSE)
   }
 
 
