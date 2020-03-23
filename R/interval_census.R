@@ -193,6 +193,10 @@ interval_census <- function(df,
 
   if (!is.null(time_adjust_period)) {
 
+    if (!time_adjust_period %in% c('start_sec','start_min','end_sec','end_min')) {
+      stop("Incorrect value passed to time_adjust_period_argument")
+    }
+
     if (time_adjust_period == 'start_sec') {
 
       pat_DT[,join_start := join_start + lubridate::seconds(time_adjust_value)]

@@ -58,7 +58,7 @@ test_that("missing identifier argument causes error", {
                               uniques = TRUE),
               throws_error())
 
-# missing
+  # missing
   expect_that(interval_census(df = beds,
                               admit = "admit_date",
                               discharge = "discharge_date",
@@ -127,7 +127,21 @@ test_that("grouped results with no group_var throws error", {
               throws_error())
 
 
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              time_unit = "1 hour",
+                              results =  "group",
+                              uniques = FALSE),
+              throws_error())
+
+
+
 })
+
+
 
 
 test_that("grouped results with uniques = TRUE throws error", {
@@ -153,7 +167,7 @@ test_that("grouped results with uniques = TRUE throws error", {
 
 test_that("grouped result defined incorrectly throws error", {
 
-  # uniques  = TRUE when grouped results requested
+  # wrong value passed to  results argument
 
 
   expect_that(interval_census(beds,
@@ -172,7 +186,7 @@ test_that("grouped result defined incorrectly throws error", {
 
 test_that("time_adjust_period with no time_adjust throws error", {
 
-  # uniques  = TRUE when grouped results requested
+  # time adjust value is null
 
 
   expect_that(interval_census(beds,
@@ -186,6 +200,21 @@ test_that("time_adjust_period with no time_adjust throws error", {
                               results =  "total",
                               uniques = TRUE),
               throws_error())
+
+
+  # time adjust is missing
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              time_adjust_period = 'start_sec',
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
 
 
 })
@@ -218,7 +247,7 @@ test_that("non numeric time_adjust throws error", {
 
 test_that("multiple time_adjust periods throw error", {
 
-  # uniques  = TRUE when grouped results requested
+  # multiple time adjust periods
 
 
   expect_that(interval_census(beds,
@@ -235,6 +264,30 @@ test_that("multiple time_adjust periods throw error", {
 
 
 })
+
+
+test_that("incorrect time_adjust periods throw error", {
+
+
+
+
+  expect_that(interval_census(beds,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              time_adjust_period = 'ron waffle',
+                              time_adjust_value = 1,
+                              results =  "total",
+                              uniques = TRUE),
+              throws_error())
+
+
+})
+
+
+
 
 
 test_that("non datetime admit column throws error", {
@@ -270,6 +323,8 @@ test_that("non datetime discharge column throws error", {
 
 
 })
+
+
 
 
 

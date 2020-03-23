@@ -7,7 +7,7 @@ test_that("`interval_census function` works with input and returns expected data
                         start_time = c("2020-01-01 11:34:00",
                                        "2020-01-01 11:34:00"),
                         end_time = c("2020-01-02 17:34:00",
-                                       "2020-01-02 17:34:00"),
+                                     "2020-01-02 17:34:00"),
                         interval_beginning = c("2020-01-01","2020-01-02"),
                         interval_end = c("2020-01-02","2020-01-03"),
                         base_date = c('2020-01-01','2020-01-02'),
