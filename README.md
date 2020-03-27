@@ -38,9 +38,7 @@ whatever granularity you need.
 ## Installation
 
 patientcounter is not on [CRAN](https://CRAN.R-project.org) yet, so
-install from github with the ‘remotes’ package
-
-And the development version from [GitHub](https://github.com/) with:
+install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes") # if not already installed
@@ -81,8 +79,7 @@ head(patient_count)
 #> 6: 2020-01-01 11:00:00 2020-01-01        10
 ```
 
-Here is how to obtain summary data for every hour, for all combined
-patient stays:
+To obtain summary data for every hour, for all combined patient stays:
 
 ``` r
 library(patientcounter)
@@ -141,7 +138,7 @@ Sys.timezone()
 
 ## Time Unit
 
-See `r`’? seq.POSIXt for valid values
+See ? seq.POSIXt for valid values
 
 E.G. ‘1 hour’, ‘15 mins’, ‘30 mins’
 
@@ -156,3 +153,31 @@ Yes, that’s possible as well - set ‘time\_adjust\_period’ to ‘end\_min�
 and set ‘time\_adjust\_interval’ as before. You can set these periods to
 any value, as long as it makes sense in relation to your chosen
 time\_unit.
+
+Here we adjust the start\_time by 5 minutes
+
+``` r
+library(patientcounter)
+patient_count_time_adjust <- interval_census(beds, 
+identifier = 'patient',
+admit = 'start_time', 
+discharge = 'end_time', 
+group_var = 'bed', 
+time_unit = '1 hour', 
+time_adjust_period = 'start_min',
+time_adjust_value = 5,
+results = "total", 
+uniques = TRUE)
+
+head(patient_count_time_adjust)
+#>     interval_beginning        interval_end  base_date base_hour N
+#> 1: 2020-01-01 09:05:00 2020-01-01 10:00:00 2020-01-01         9 2
+#> 2: 2020-01-01 10:05:00 2020-01-01 11:00:00 2020-01-01        10 5
+#> 3: 2020-01-01 11:05:00 2020-01-01 12:00:00 2020-01-01        11 4
+#> 4: 2020-01-01 12:05:00 2020-01-01 13:00:00 2020-01-01        12 3
+#> 5: 2020-01-01 13:05:00 2020-01-01 14:00:00 2020-01-01        13 3
+#> 6: 2020-01-01 14:05:00 2020-01-01 15:00:00 2020-01-01        14 3
+```
+
+Valid values for time\_adjust\_period are ‘start\_min’, ‘start\_sec’,
+‘end\_min’ and ‘end\_sec’

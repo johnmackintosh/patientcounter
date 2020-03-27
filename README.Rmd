@@ -46,12 +46,7 @@ If you have time in, time out, a unique patient identifier, and optionally, a gr
 
 ## Installation
 
-patientcounter is not on [CRAN](https://CRAN.R-project.org) yet, so install from 
-github with the 'remotes' package
-
-
-
-And the development version from [GitHub](https://github.com/) with:
+patientcounter is not on [CRAN](https://CRAN.R-project.org) yet, so install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes") # if not already installed
@@ -79,7 +74,7 @@ head(patient_count)
 
 
 
-Here is how to obtain summary data for every hour, for all combined patient stays:
+To obtain summary data for every hour, for all combined patient stays:
 
 ```{r example_hour, echo=TRUE}
 library(patientcounter)
@@ -131,7 +126,7 @@ Sys.timezone()
 ## Time Unit
 
 
-See `r`'? seq.POSIXt for valid values
+See ? seq.POSIXt for valid values
 
 E.G. '1 hour', '15 mins', '30 mins'
 
@@ -145,6 +140,24 @@ You can do that using 'time_adjust_period' - set it to 'start_min' and then set
 
 10:00 to 10:59?  
 Yes, that's possible as well - set 'time_adjust_period' to 'end_min' and set 
-'time_adjust_interval' as before. You can set these periods to any value, as long
-as it makes sense in relation to your chosen time_unit.
+'time_adjust_interval' as before. You can set these periods to any value, as long as it makes sense in relation to your chosen time_unit.
 
+Here we adjust the start_time by 5 minutes
+
+```{r example_start_min, echo=TRUE}
+library(patientcounter)
+patient_count_time_adjust <- interval_census(beds, 
+identifier = 'patient',
+admit = 'start_time', 
+discharge = 'end_time', 
+group_var = 'bed', 
+time_unit = '1 hour', 
+time_adjust_period = 'start_min',
+time_adjust_value = 5,
+results = "total", 
+uniques = TRUE)
+
+head(patient_count_time_adjust)
+```
+
+Valid values for time_adjust_period are 'start_min', 'start_sec', 'end_min' and 'end_sec'

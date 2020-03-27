@@ -197,3 +197,25 @@ test_that("`interval_census function` works with input and returns expected data
 
 }
 )
+
+
+
+
+test_that("`end_date is not NULL / NA` ", {
+
+
+
+  test_na <- interval_census(beds[beds$patient == 10,],
+                              identifier = 'patient',
+                              admit = 'start_time',
+                              discharge  = 'end_time',
+                              time_unit = '1 day',
+                              results = 'patient')
+
+
+  expect_false(anyNA(test_na$end_time))
+
+
+}
+)
+
