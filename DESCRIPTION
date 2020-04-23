@@ -1,5 +1,5 @@
 Package: patientcounter
-Title: Counts Hosptial Patients Quickly
+Title: Counts Hospital Patients Quickly
 Version: 0.1.0
 Authors@R: 
     person(given = "John",
