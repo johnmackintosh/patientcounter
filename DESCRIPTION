@@ -1,5 +1,5 @@
 Package: patientcounter
-Title: Counts Patients Quickly
+Title: Counts Hospital Patients Quickly
 Version: 0.1.0
 Authors@R: 
     person(given = "John",
@@ -9,7 +9,7 @@ Authors@R:
 Description: Fast, flexible census of patient occupancy in multiple locations in 
     hospital setting.  Obtain net count of patients, accounting for
     those admitted before and not yet discharged. 
-    Typically, this requires a database and knowledge of SQL. 
+    Typically, this requires a database and knowledge of 'SQL'. 
     This package allows anyone who has time in, time out, unique identifiers, 
     and an optional grouping variable, to accurately determine how many patients 
     were occupying beds, at any time of day and granularity.
@@ -20,6 +20,6 @@ Imports: data.table, lubridate
 LazyData: true
 URL: https://github.com/johnmackintosh/patientcounter
 BugReports: https://github.com/johnmackintosh/patientcounter/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0)
