@@ -30,6 +30,7 @@
 #'
 #' @import data.table
 #' @importFrom lubridate floor_date ceiling_date seconds minutes date force_tz
+#' @importFrom lubridate ymd_hms
 #' @importFrom utils head tail
 #' @export
 #'
