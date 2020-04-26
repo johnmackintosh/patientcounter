@@ -125,7 +125,7 @@ to enable easier filtering of the results.
   - To count individual patients ONLY, leave ‘uniques’ at the default
     value of ‘TRUE’.  
   - To count patient moves between locations during intervals, set
-    uniques to ‘FALSE’. Patients who occupy beds in different locations
+    ‘uniques’ to ‘FALSE’. Patients who occupy beds in different locations
     during each interval are accounted for in each location. They will
     be counted at least twice during an interval - both in their initial
     location and their new location following a move.
