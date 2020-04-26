@@ -115,16 +115,20 @@ to enable easier filtering of the results.
   - Set results to ‘patient’ for 1 row per patient per interval for each
     interval in the patient stay.
   - Set results to ‘group’ to get a count per group per interval.  
-    Remember this will also be influenced by the ‘uniques’ argument.  
+    Remember this will also be influenced by the ‘uniques’ argument -
+    set it to FALSE to ensure each move in each location is counted.  
   - Set results to ‘total’ for a summary of the data set - interval,
     base\_hour and count.
 
-## Uniques
+## Tracking moves within the same interval with ‘uniques’
 
-  - To count patients, leave ‘uniques’ at the default value of ‘TRUE’.  
+  - To count individual patients ONLY, leave ‘uniques’ at the default
+    value of ‘TRUE’.  
   - To count patient moves between locations during intervals, set
-    uniques to ‘FALSE’. This will ensure patients who occupy beds in
-    different locations during each interval are accounted for.
+    uniques to ‘FALSE’. Patients who occupy beds in different locations
+    during each interval are accounted for in each location. They will
+    be counted at least twice during an interval - both in their initial
+    location and their new location following a move.
 
 ## Timezones
 
