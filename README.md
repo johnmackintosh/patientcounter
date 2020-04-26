@@ -5,9 +5,9 @@
 
 # patientcounter <img src="man/figures/logo.png" width="160px" align="right" />
 
-[![Project Status: WIP – Initial development is in progress, but there
-has not yet been a stable, usable release suitable for the
-public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
 [![Build
 Status](https://travis-ci.com/johnmackintosh/patientcounter.svg?branch=master)](https://travis-ci.com/johnmackintosh/patientcounter)
@@ -20,6 +20,7 @@ status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patien
 [![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/johnmackintosh/patientcounter)
 
 [![](https://img.shields.io/github/last-commit/johnmackintosh/patientcounter.svg)](https://github.com/johnmackintosh/patientcounter/commits/master)
+
 <!-- badges: end -->
 
 How many patients were in the hospital at 10 AM yesterday?  
