@@ -1,5 +1,5 @@
 Package: patientcounter
-Title: Fast Flexible Census Tables To Count Hospital Patients Quickly
+Title: Count Hospital Patients Quickly
 Version: 0.1.0
 Authors@R: 
     person(given = "John",
