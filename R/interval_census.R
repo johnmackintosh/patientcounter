@@ -1,32 +1,58 @@
-#' interval_census
-#' A census of the number of patients , or moves/ transfers, by interval
+#' Count the number of patients by interval
 #'
+#' Counts the number of patients in each location, by the specified interval,
+#' for the duration of the patient admission. Results can be returned as a
+#' grand totals, grouped totals, or individual patient level per interval.
 #'
-#' @param df dataframe, tibble or data.table
-#' @param identifier unique patient identifier
-#' @param admit datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss
-#' @param discharge datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss
-#' @param group_var unique character vector to identify location/clinician at each move
-#' @param time_unit character string to denote time intervals to count by e.g. "1 hour", "15 mins"
-#' @param time_adjust_period "start_sec","start_min","end_sec","end_min"
-#' @param time_adjust_value integer to adjust the start / end of each period in minutes or seconds
-#' @param results 'patient' returns one row per patient, groupvar and interval.
+#' @param df dataframe, tibble or data.table.
+#' @param identifier Unique patient identifier.
+#' @param admit Datetime of admission as POSIXct.
+#' @param discharge Datetime of discharge as POSIXct.
+#' @param group_var Optional unique character vector to identify specific patient
+#' location or responsible clinician at each interval, or at time of a change in
+#' location / responsible clinician during the interval.
 #'
-#' 'group' provides an overall grouped count of patients by the specified time interval.
+#' @param time_unit Character string to denote time intervals to count by e.g.
+#' "1 hour", "15 mins".
+#' @param time_adjust_period Optional argument which allows
+#' the user to obtain a snapshot at a specific time of day by making slight
+#' adjustments  to the specifiedinterval.
+#' Possible values are "start_sec","start_min","end_sec", or "end_min".
+#' For example, you may specify hourly intervals, but adjust these
+#' to 1 minute past the hour with "start_min", or several seconds before the
+#' end with "end_sec".
 #'
-#' 'total' returns the grand total of patients 'IN' by each unique time interval.
-#' @param uniques TRUE will count patients once per interval, even if they have
-#' more than one entry per interval, for example, due to move to another location.
-#' Use this to get a *distinct* count of patients per interval
+#' @param time_adjust_value Optional. An integer to adjust the startor  end of
+#' each period in minutes or seconds, depending on the  chosen
+#' time_adjust_period (if specified).
 #'
-#' FALSE will count each patient entry per interval.
-#' If a patient moves during an interval there will be  at least two rows for
-#' that patient for that interval.
-#' This is useful if you want to count occupied beds,or a count of moves / transfers between departments
+#' @param results A character string specifying the granularity of the results.
 #'
-#' @return data.table showing identifier, group variable , and count by relevant unit of time
-#' Also includes the start / end of interval, plus the base date and base hour for
-#' convenient interactive filtering of the results
+#' 'patient' returns one row per patient, group_var and interval. The results
+#' can be input to external tools for further analysis or visualisation.
+#'
+#' 'group' provides an overall grouped count of patients by the specified time
+#' interval.
+#'
+#' 'total' returns the grand total of patients  by each unique time interval.
+#'
+#' @param uniques Logical. Specifies how to deal with patients who move during
+#' an interval, and subsequently have two or more records per interval.
+#' Set "uniques" to TRUE to get a distinct count of patients per interval.
+#' To be clear, TRUE will count patients only once per interval.
+#'
+#' Setting "uniques" to  FALSE will count each patient entry per interval.
+#' If a patient moves during an interval then at least two rows will be returned
+#' for tha patient for that particular interval.
+#' This is useful if you want to count occupied beds, or track moves  or
+#' transfers between departments.
+#'
+#' In general, if you use a grouping variable, set "uniques" to FALSE.
+#'
+#' @return data.table showing the patient identifier, the specified group
+#' variable , and  the count by  the relevant unit of time.
+#' Also included are the start and end of the interval, plus the date and
+#' base hour for convenient interactive filtering of the results.
 #'
 #' @import data.table
 #' @importFrom lubridate floor_date ceiling_date seconds minutes date force_tz
@@ -37,14 +63,14 @@
 #' @examples
 #' \donttest{
 #'interval_census(beds, identifier ="patient", admit = "start_time",
-#'discharge = "end_time", time_unit = "1 hour",results = "total")
+#'discharge = "end_time", time_unit = "1 hour", results = "total")
 #'
 #'interval_census(beds, identifier ="patient", admit = "start_time",
-#'discharge = "end_time", time_unit = "1 hour",results = "patient")
+#'discharge = "end_time", time_unit = "1 hour", results = "patient")
 #'
 #'interval_census(beds, identifier ="patient", admit = "start_time",
 #'discharge = "end_time", group_var = "bed",
-#'time_unit = "1 hour", results = "group", uniques= FALSE)
+#'time_unit = "1 hour", results = "group", uniques = FALSE)
 #'
 #' }
 #'
@@ -55,7 +81,7 @@ interval_census <- function(df,
                             discharge,
                             group_var = NULL,
                             time_unit = "1 hour",
-                            time_adjust_period = NULL, #"start_sec","start_min","end_sec","end_min"
+                            time_adjust_period = NULL,
                             time_adjust_value = NULL,
                             results = c("patient", "group", "total"),
                             uniques = TRUE) {

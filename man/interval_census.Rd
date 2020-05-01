@@ -2,8 +2,7 @@
 % Please edit documentation in R/interval_census.R
 \name{interval_census}
 \alias{interval_census}
-\title{interval_census
-A census of the number of patients , or moves/ transfers, by interval}
+\title{Count the number of patients by interval}
 \usage{
 interval_census(
   df,
@@ -19,57 +18,78 @@ interval_census(
 )
 }
 \arguments{
-\item{df}{dataframe, tibble or data.table}
+\item{df}{dataframe, tibble or data.table.}
 
-\item{identifier}{unique patient identifier}
+\item{identifier}{Unique patient identifier.}
 
-\item{admit}{datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss}
+\item{admit}{Datetime of admission as POSIXct.}
 
-\item{discharge}{datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss}
+\item{discharge}{Datetime of discharge as POSIXct.}
 
-\item{group_var}{unique character vector to identify location/clinician at each move}
+\item{group_var}{Optional unique character vector to identify specific patient
+location or responsible clinician at each interval, or at time of a change in
+location / responsible clinician during the interval.}
 
-\item{time_unit}{character string to denote time intervals to count by e.g. "1 hour", "15 mins"}
+\item{time_unit}{Character string to denote time intervals to count by e.g.
+"1 hour", "15 mins".}
 
-\item{time_adjust_period}{"start_sec","start_min","end_sec","end_min"}
+\item{time_adjust_period}{Optional argument which allows
+the user to obtain a snapshot at a specific time of day by making slight
+adjustments  to the specifiedinterval.
+Possible values are "start_sec","start_min","end_sec", or "end_min".
+For example, you may specify hourly intervals, but adjust these
+to 1 minute past the hour with "start_min", or several seconds before the
+end with "end_sec".}
 
-\item{time_adjust_value}{integer to adjust the start / end of each period in minutes or seconds}
+\item{time_adjust_value}{Optional. An integer to adjust the startor  end of
+each period in minutes or seconds, depending on the  chosen
+time_adjust_period (if specified).}
 
-\item{results}{'patient' returns one row per patient, groupvar and interval.
+\item{results}{A character string specifying the granularity of the results.
 
-'group' provides an overall grouped count of patients by the specified time interval.
+'patient' returns one row per patient, group_var and interval. The results
+can be input to external tools for further analysis or visualisation.
 
-'total' returns the grand total of patients 'IN' by each unique time interval.}
+'group' provides an overall grouped count of patients by the specified time
+interval.
 
-\item{uniques}{TRUE will count patients once per interval, even if they have
-more than one entry per interval, for example, due to move to another location.
-Use this to get a *distinct* count of patients per interval
+'total' returns the grand total of patients  by each unique time interval.}
 
-FALSE will count each patient entry per interval.
-If a patient moves during an interval there will be  at least two rows for
-that patient for that interval.
-This is useful if you want to count occupied beds,or a count of moves / transfers between departments}
+\item{uniques}{Logical. Specifies how to deal with patients who move during
+an interval, and subsequently have two or more records per interval.
+Set "uniques" to TRUE to get a distinct count of patients per interval.
+To be clear, TRUE will count patients only once per interval.
+
+Setting "uniques" to  FALSE will count each patient entry per interval.
+If a patient moves during an interval then at least two rows will be returned
+for tha patient for that particular interval.
+This is useful if you want to count occupied beds, or track moves  or
+transfers between departments.
+
+In general, if you use a grouping variable, set "uniques" to FALSE.}
 }
 \value{
-data.table showing identifier, group variable , and count by relevant unit of time
-Also includes the start / end of interval, plus the base date and base hour for
-convenient interactive filtering of the results
+data.table showing the patient identifier, the specified group
+variable , and  the count by  the relevant unit of time.
+Also included are the start and end of the interval, plus the date and
+base hour for convenient interactive filtering of the results.
 }
 \description{
-interval_census
-A census of the number of patients , or moves/ transfers, by interval
+Counts the number of patients in each location, by the specified interval,
+for the duration of the patient admission. Results can be returned as a
+grand totals, grouped totals, or individual patient level per interval.
 }
 \examples{
 \donttest{
 interval_census(beds, identifier ="patient", admit = "start_time",
-discharge = "end_time", time_unit = "1 hour",results = "total")
+discharge = "end_time", time_unit = "1 hour", results = "total")
 
 interval_census(beds, identifier ="patient", admit = "start_time",
-discharge = "end_time", time_unit = "1 hour",results = "patient")
+discharge = "end_time", time_unit = "1 hour", results = "patient")
 
 interval_census(beds, identifier ="patient", admit = "start_time",
 discharge = "end_time", group_var = "bed",
-time_unit = "1 hour", results = "group", uniques= FALSE)
+time_unit = "1 hour", results = "group", uniques = FALSE)
 
 }
 
