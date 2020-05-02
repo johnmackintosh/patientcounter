@@ -35,7 +35,7 @@ location / responsible clinician during the interval.}
 
 \item{time_adjust_period}{Optional argument which allows
 the user to obtain a snapshot at a specific time of day by making slight
-adjustments  to the specifiedinterval.
+adjustments  to the specified interval.
 Possible values are "start_sec","start_min","end_sec", or "end_min".
 For example, you may specify hourly intervals, but adjust these
 to 1 minute past the hour with "start_min", or several seconds before the
