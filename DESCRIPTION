@@ -1,11 +1,15 @@
 Package: patientcounter
 Title: Count Hospital Patients Quickly
 Version: 0.1.0
-Authors@R: 
+Authors@R: c(
     person(given = "John",
            family = "MacKintosh",
            role = c("aut", "cre"),
-           email = "johnmackintosh.jm@gmail.com")
+           email = "johnmackintosh.jm@gmail.com"),
+    person("John", "Muschelli", 
+                    role = "ctb",
+                    comment = c(ORCID = "0000-0001-6469-1750"))
+                    )
 Description: Fast, flexible census of patient occupancy in multiple locations in 
     hospital setting.  Obtain net count of patients, accounting for
     those admitted before and not yet discharged. 
@@ -16,7 +20,9 @@ Description: Fast, flexible census of patient occupancy in multiple locations in
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 2.10)
-Imports: data.table, lubridate
+Imports: 
+    data.table, 
+    lubridate
 LazyData: true
 URL: https://github.com/johnmackintosh/patientcounter
 BugReports: https://github.com/johnmackintosh/patientcounter/issues
