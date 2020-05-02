@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>interval_census
-A census of the number of patients , or moves/ transfers, by interval — interval_census • patientcounter</title>
+<title>Count the number of patients by interval — interval_census • patientcounter</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -47,10 +46,10 @@ A census of the number of patients , or moves/ transfers, by interval — interv
 
 
 
-<meta property="og:title" content="interval_census
-A census of the number of patients , or moves/ transfers, by interval — interval_census" />
-<meta property="og:description" content="interval_census
-A census of the number of patients , or moves/ transfers, by interval" />
+<meta property="og:title" content="Count the number of patients by interval — interval_census" />
+<meta property="og:description" content="Counts the number of patients in each location, by the specified interval,
+for the duration of the patient admission. Results can be returned as a
+grand totals, grouped totals, or individual patient level per interval." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -122,15 +121,15 @@ A census of the number of patients , or moves/ transfers, by interval" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>interval_census
-A census of the number of patients , or moves/ transfers, by interval</h1>
+    <h1>Count the number of patients by interval</h1>
     <small class="dont-index">Source: <a href='https://github.com/johnmackintosh/patientcounter/blob/master/R/interval_census.R'><code>R/interval_census.R</code></a></small>
     <div class="hidden name"><code>interval_census.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>interval_census
-A census of the number of patients , or moves/ transfers, by interval</p>
+    <p>Counts the number of patients in each location, by the specified interval,
+for the duration of the patient admission. Results can be returned as a
+grand totals, grouped totals, or individual patient level per interval.</p>
     </div>
 
     <pre class="usage"><span class='fu'>interval_census</span>(
@@ -151,67 +150,85 @@ A census of the number of patients , or moves/ transfers, by interval</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>dataframe, tibble or data.table</p></td>
+      <td><p>dataframe, tibble or data.table.</p></td>
     </tr>
     <tr>
       <th>identifier</th>
-      <td><p>unique patient identifier</p></td>
+      <td><p>Unique patient identifier.</p></td>
     </tr>
     <tr>
       <th>admit</th>
-      <td><p>datetime of admission as POSIXct yyyy-mm-dd hh:mm:ss</p></td>
+      <td><p>Datetime of admission as POSIXct.</p></td>
     </tr>
     <tr>
       <th>discharge</th>
-      <td><p>datetime of discharge as POSIXct yyyy-mm-dd hh:mm:ss</p></td>
+      <td><p>Datetime of discharge as POSIXct.</p></td>
     </tr>
     <tr>
       <th>group_var</th>
-      <td><p>unique character vector to identify location/clinician at each move</p></td>
+      <td><p>Optional unique character vector to identify specific patient
+location or responsible clinician at each interval, or at time of a change in
+location / responsible clinician during the interval.</p></td>
     </tr>
     <tr>
       <th>time_unit</th>
-      <td><p>character string to denote time intervals to count by e.g. "1 hour", "15 mins"</p></td>
+      <td><p>Character string to denote time intervals to count by e.g.
+"1 hour", "15 mins".</p></td>
     </tr>
     <tr>
       <th>time_adjust_period</th>
-      <td><p>"start_sec","start_min","end_sec","end_min"</p></td>
+      <td><p>Optional argument which allows
+the user to obtain a snapshot at a specific time of day by making slight
+adjustments  to the specified interval.
+Possible values are "start_sec","start_min","end_sec", or "end_min".
+For example, you may specify hourly intervals, but adjust these
+to 1 minute past the hour with "start_min", or several seconds before the
+end with "end_sec".</p></td>
     </tr>
     <tr>
       <th>time_adjust_value</th>
-      <td><p>integer to adjust the start / end of each period in minutes or seconds</p></td>
+      <td><p>Optional. An integer to adjust the startor  end of
+each period in minutes or seconds, depending on the  chosen
+time_adjust_period (if specified).</p></td>
     </tr>
     <tr>
       <th>results</th>
-      <td><p>'patient' returns one row per patient, groupvar and interval.</p>
-<p>'group' provides an overall grouped count of patients by the specified time interval.</p>
-<p>'total' returns the grand total of patients 'IN' by each unique time interval.</p></td>
+      <td><p>A character string specifying the granularity of the results.</p>
+<p>'patient' returns one row per patient, group_var and interval. The results
+can be input to external tools for further analysis or visualisation.</p>
+<p>'group' provides an overall grouped count of patients by the specified time
+interval.</p>
+<p>'total' returns the grand total of patients  by each unique time interval.</p></td>
     </tr>
     <tr>
       <th>uniques</th>
-      <td><p>TRUE will count patients once per interval, even if they have
-more than one entry per interval, for example, due to move to another location.
-Use this to get a *distinct* count of patients per interval</p>
-<p>FALSE will count each patient entry per interval.
-If a patient moves during an interval there will be  at least two rows for
-that patient for that interval.
-This is useful if you want to count occupied beds,or a count of moves / transfers between departments</p></td>
+      <td><p>Logical. Specifies how to deal with patients who move during
+an interval, and subsequently have two or more records per interval.
+Set "uniques" to TRUE to get a distinct count of patients per interval.
+To be clear, TRUE will count patients only once per interval.</p>
+<p>Setting "uniques" to  FALSE will count each patient entry per interval.
+If a patient moves during an interval then at least two rows will be returned
+for tha patient for that particular interval.
+This is useful if you want to count occupied beds, or track moves  or
+transfers between departments.</p>
+<p>In general, if you use a grouping variable, set "uniques" to FALSE.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.table showing identifier, group variable , and count by relevant unit of time
-Also includes the start / end of interval, plus the base date and base hour for
-convenient interactive filtering of the results</p>
+    <p>data.table showing the patient identifier, the specified group
+variable , and  the count by  the relevant unit of time.
+Also included are the start and end of the interval, plus the date and
+base hour for convenient interactive filtering of the results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'>interval_census</span>(<span class='no'>beds</span>, <span class='kw'>identifier</span> <span class='kw'>=</span><span class='st'>"patient"</span>, <span class='kw'>admit</span> <span class='kw'>=</span> <span class='st'>"start_time"</span>,
-<span class='kw'>discharge</span> <span class='kw'>=</span> <span class='st'>"end_time"</span>, <span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>,<span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"total"</span>)
+<span class='kw'>discharge</span> <span class='kw'>=</span> <span class='st'>"end_time"</span>, <span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>, <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"total"</span>)
 
 <span class='fu'>interval_census</span>(<span class='no'>beds</span>, <span class='kw'>identifier</span> <span class='kw'>=</span><span class='st'>"patient"</span>, <span class='kw'>admit</span> <span class='kw'>=</span> <span class='st'>"start_time"</span>,
-<span class='kw'>discharge</span> <span class='kw'>=</span> <span class='st'>"end_time"</span>, <span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>,<span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"patient"</span>)</div><div class='output co'>#&gt;      bed patient          start_time            end_time  interval_beginning
+<span class='kw'>discharge</span> <span class='kw'>=</span> <span class='st'>"end_time"</span>, <span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>, <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"patient"</span>)</div><div class='output co'>#&gt;      bed patient          start_time            end_time  interval_beginning
 #&gt;   1:   A       1 2020-01-01 09:34:00 2020-01-01 10:34:00 2020-01-01 09:00:00
 #&gt;   2:   B       5 2020-01-01 09:45:00 2020-01-01 14:45:00 2020-01-01 09:00:00
 #&gt;   3:   A       1 2020-01-01 09:34:00 2020-01-01 10:34:00 2020-01-01 10:00:00
@@ -237,7 +254,7 @@ convenient interactive filtering of the results</p>
 #&gt; 120: 2020-01-03 00:00:00 2020-01-02        23</div><div class='input'>
 <span class='fu'>interval_census</span>(<span class='no'>beds</span>, <span class='kw'>identifier</span> <span class='kw'>=</span><span class='st'>"patient"</span>, <span class='kw'>admit</span> <span class='kw'>=</span> <span class='st'>"start_time"</span>,
 <span class='kw'>discharge</span> <span class='kw'>=</span> <span class='st'>"end_time"</span>, <span class='kw'>group_var</span> <span class='kw'>=</span> <span class='st'>"bed"</span>,
-<span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>, <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>uniques</span><span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;     bed  interval_beginning        interval_end  base_date base_hour N
+<span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='st'>"1 hour"</span>, <span class='kw'>results</span> <span class='kw'>=</span> <span class='st'>"group"</span>, <span class='kw'>uniques</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;     bed  interval_beginning        interval_end  base_date base_hour N
 #&gt;  1:   A 2020-01-01 09:00:00 2020-01-01 10:00:00 2020-01-01         9 1
 #&gt;  2:   B 2020-01-01 09:00:00 2020-01-01 10:00:00 2020-01-01         9 1
 #&gt;  3:   A 2020-01-01 10:00:00 2020-01-01 11:00:00 2020-01-01        10 2
