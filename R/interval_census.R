@@ -250,15 +250,15 @@ interval_census <- function(df,
   }
 
   out_of_zone <- ref[join_start > join_end,.N][]
-  .bad_dates <- ref[join_start > join_end,]
-  setnames(.bad_dates,
-           old = c("join_start","join_end"),
-           new = c("interval_beginning","interval_end"),
-           skip_absent = TRUE)
+  #.bad_dates <- ref[join_start > join_end,]
+ # setnames(.bad_dates,
+          # old = c("join_start","join_end"),
+          # new = c("interval_beginning","interval_end"),
+          # skip_absent = TRUE)
 
   if (out_of_zone >= 1) {
-    warning(paste0(out_of_zone,' ', "date(s) span(s) timezone changes and has / have been identified"))
-    print(.bad_dates)
+    message(paste0(out_of_zone,' ', "date(s) span(s) timezone changes and has / have been identified"))
+    # print(.bad_dates)
   }
 
 

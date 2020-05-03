@@ -11,12 +11,10 @@ Authors@R: c(
                     comment = c(ORCID = "0000-0001-6469-1750"))
                     )
 Description: Fast, flexible census of patient occupancy in multiple locations in 
-    hospital setting.  Obtain net count of patients, accounting for
-    those admitted before and not yet discharged. 
-    Typically, this requires a database / data warehouse and knowledge of 'SQL'. 
-    This package allows anyone who has time in, time out, unique identifiers, 
-    and an optional grouping variable, to accurately determine how many patients 
-    were occupying beds, at any time of day and granularity.
+    hospital setting. Obtain the net count of patients by interval, accounting 
+    for those admitted prior to specific intervals, those who move during 
+    intervals, and those not yet discharged, without requiring a database 
+    or knowledge of 'SQL'.
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 2.10)
