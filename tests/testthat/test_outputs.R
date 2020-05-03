@@ -38,6 +38,81 @@ testthat::test_that(
 )
 
 
+testthat::test_that(
+  "`interval_census function` returns expected grouped data.frame", {
+
+    # basic function test
+
+    checkDT2 <- data.table(bed = c("A","A"),
+                          interval_beginning = c("2020-01-01","2020-01-02"),
+                          interval_end = c("2020-01-02","2020-01-03"),
+                          base_date = c('2020-01-01','2020-01-02'),
+                          base_hour = c(0,0),
+                          N = c(1,1))
+
+    checkDT2$interval_beginning <- lubridate::as_datetime(checkDT2$interval_beginning)
+    checkDT2$interval_end <- lubridate::as_datetime(checkDT2$interval_end)
+    checkDT2$base_date <- data.table::as.IDate(checkDT2$base_date)
+
+
+    setkey(checkDT2, interval_beginning, interval_end)
+
+    test_res2 <- interval_census(beds[beds$patient == 3,],
+                                identifier = 'patient',
+                                admit = 'start_time',
+                                discharge  = 'end_time',
+                                time_unit = '1 day',
+                                group_var = 'bed',
+                                results = 'group',
+                                uniques = FALSE)
+
+
+    testthat::expect_equivalent(test_res2, checkDT2)
+
+
+  }
+)
+
+
+
+testthat::test_that(
+  "`interval_census function` returns expected totals data.frame", {
+
+    # basic function test
+
+    checkDT3 <- data.table(interval_beginning = c("2020-01-01","2020-01-02"),
+                           interval_end = c("2020-01-02","2020-01-03"),
+                           base_date = c('2020-01-01','2020-01-02'),
+                           base_hour = c(0,0),
+                           N = c(1,1))
+
+    checkDT3$interval_beginning <- lubridate::as_datetime(checkDT3$interval_beginning)
+    checkDT3$interval_end <- lubridate::as_datetime(checkDT3$interval_end)
+    checkDT3$base_date <- data.table::as.IDate(checkDT3$base_date)
+
+
+    setkey(checkDT3, interval_beginning, interval_end)
+
+    test_res3 <- interval_census(beds[beds$patient == 3,],
+                                 identifier = 'patient',
+                                 admit = 'start_time',
+                                 discharge  = 'end_time',
+                                 time_unit = '1 day',
+                                 results = 'total')
+
+
+    testthat::expect_equivalent(test_res3, checkDT3)
+
+
+  }
+)
+
+
+
+
+
+
+
 # check time adjust values
 
 test_that("`interval_census function` works with input and returns expected data.frame", {

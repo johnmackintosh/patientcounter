@@ -165,7 +165,7 @@ interval_census <- function(df,
 
   .confounding <- pat_DT[get(admit) == get(discharge),.N]
   if (.confounding > 0) {
-    warning(paste0('There were ',.confounding,' ', 'records with identical admission and discharge date times.
+    message(paste0('There were ',.confounding,' ', 'records with identical admission and discharge date times.
                    These records have been ignored in the analysis'))
   }
 
