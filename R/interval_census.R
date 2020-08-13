@@ -313,6 +313,6 @@ interval_census <- function(df,
   } else {
 
     pat_res <-  pat_res[, .N, .(interval_beginning,interval_end, base_date, base_hour)][]
-    pat_res
+    return(pat_res)
   }
 }
