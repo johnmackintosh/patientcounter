@@ -92,6 +92,7 @@ group_var = 'bed',
 time_unit = '1 hour', 
 results = "total", 
 uniques = TRUE)
+
 head(patient_count_hour)
 #>     interval_beginning        interval_end N  base_date base_hour
 #> 1: 2020-01-01 09:00:00 2020-01-01 10:00:00 2 2020-01-01         9
