@@ -92,15 +92,14 @@ group_var = 'bed',
 time_unit = '1 hour', 
 results = "total", 
 uniques = TRUE)
-
 head(patient_count_hour)
-#>     interval_beginning        interval_end  base_date base_hour N
-#> 1: 2020-01-01 09:00:00 2020-01-01 10:00:00 2020-01-01         9 2
-#> 2: 2020-01-01 10:00:00 2020-01-01 11:00:00 2020-01-01        10 5
-#> 3: 2020-01-01 11:00:00 2020-01-01 12:00:00 2020-01-01        11 4
-#> 4: 2020-01-01 12:00:00 2020-01-01 13:00:00 2020-01-01        12 3
-#> 5: 2020-01-01 13:00:00 2020-01-01 14:00:00 2020-01-01        13 3
-#> 6: 2020-01-01 14:00:00 2020-01-01 15:00:00 2020-01-01        14 3
+#>     interval_beginning        interval_end N  base_date base_hour
+#> 1: 2020-01-01 09:00:00 2020-01-01 10:00:00 2 2020-01-01         9
+#> 2: 2020-01-01 10:00:00 2020-01-01 11:00:00 5 2020-01-01        10
+#> 3: 2020-01-01 11:00:00 2020-01-01 12:00:00 4 2020-01-01        11
+#> 4: 2020-01-01 12:00:00 2020-01-01 13:00:00 3 2020-01-01        12
+#> 5: 2020-01-01 13:00:00 2020-01-01 14:00:00 3 2020-01-01        13
+#> 6: 2020-01-01 14:00:00 2020-01-01 15:00:00 3 2020-01-01        14
 ```
 
 Note that you also receive the base date and base hour for each interval
@@ -125,7 +124,7 @@ to enable easier filtering of the results.
   - To count individual patients ONLY, leave ‘uniques’ at the default
     value of ‘TRUE’.  
   - To count patient moves between locations during intervals, set
-    ‘uniques’ to ‘FALSE’. Patients who occupy beds in different locations
+    uniques to ‘FALSE’. Patients who occupy beds in different locations
     during each interval are accounted for in each location. They will
     be counted at least twice during an interval - both in their initial
     location and their new location following a move.
@@ -175,13 +174,13 @@ results = "total",
 uniques = TRUE)
 
 head(patient_count_time_adjust)
-#>     interval_beginning        interval_end  base_date base_hour N
-#> 1: 2020-01-01 09:05:00 2020-01-01 10:00:00 2020-01-01         9 2
-#> 2: 2020-01-01 10:05:00 2020-01-01 11:00:00 2020-01-01        10 5
-#> 3: 2020-01-01 11:05:00 2020-01-01 12:00:00 2020-01-01        11 4
-#> 4: 2020-01-01 12:05:00 2020-01-01 13:00:00 2020-01-01        12 3
-#> 5: 2020-01-01 13:05:00 2020-01-01 14:00:00 2020-01-01        13 3
-#> 6: 2020-01-01 14:05:00 2020-01-01 15:00:00 2020-01-01        14 3
+#>     interval_beginning        interval_end N  base_date base_hour
+#> 1: 2020-01-01 09:05:00 2020-01-01 10:00:00 2 2020-01-01         9
+#> 2: 2020-01-01 10:05:00 2020-01-01 11:00:00 5 2020-01-01        10
+#> 3: 2020-01-01 11:05:00 2020-01-01 12:00:00 4 2020-01-01        11
+#> 4: 2020-01-01 12:05:00 2020-01-01 13:00:00 3 2020-01-01        12
+#> 5: 2020-01-01 13:05:00 2020-01-01 14:00:00 3 2020-01-01        13
+#> 6: 2020-01-01 14:05:00 2020-01-01 15:00:00 3 2020-01-01        14
 ```
 
 Valid values for time\_adjust\_period are ‘start\_min’, ‘start\_sec’,

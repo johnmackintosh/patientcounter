@@ -46,9 +46,9 @@ testthat::test_that(
     checkDT2 <- data.table(bed = c("A","A"),
                           interval_beginning = c("2020-01-01","2020-01-02"),
                           interval_end = c("2020-01-02","2020-01-03"),
+                          N = c(1,1),
                           base_date = c('2020-01-01','2020-01-02'),
-                          base_hour = c(0,0),
-                          N = c(1,1))
+                          base_hour = c(0,0))
 
     checkDT2$interval_beginning <- lubridate::as_datetime(checkDT2$interval_beginning)
     checkDT2$interval_end <- lubridate::as_datetime(checkDT2$interval_end)
@@ -82,9 +82,9 @@ testthat::test_that(
 
     checkDT3 <- data.table(interval_beginning = c("2020-01-01","2020-01-02"),
                            interval_end = c("2020-01-02","2020-01-03"),
+                           N = c(1,1),
                            base_date = c('2020-01-01','2020-01-02'),
-                           base_hour = c(0,0),
-                           N = c(1,1))
+                           base_hour = c(0,0))
 
     checkDT3$interval_beginning <- lubridate::as_datetime(checkDT3$interval_beginning)
     checkDT3$interval_end <- lubridate::as_datetime(checkDT3$interval_end)

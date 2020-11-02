@@ -308,11 +308,13 @@ interval_census <- function(df,
     pat_res <- pat_res[, .N, .(groupvar = get(group_var),
                                interval_beginning, interval_end, base_date, base_hour)][]
     setnames(pat_res, old = "groupvar", new = group_var, skip_absent = TRUE)
+    setcolorder(pat_res, c(1,2,3,6,4,5))
     return(pat_res)
 
   } else {
 
     pat_res <-  pat_res[, .N, .(interval_beginning,interval_end, base_date, base_hour)][]
+    setcolorder(pat_res, c("interval_beginning","interval_end", "N", "base_date", "base_hour"))
     return(pat_res)
   }
 }
