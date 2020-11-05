@@ -326,4 +326,29 @@ test_that("non datetime discharge column throws error", {
 
 
 
+test_that("same start and end time causes warning", {
+  checkDT <- data.table(bed = c("A","B"),
+                        patient = c(3,4),
+                        start_time = c("2020-01-01 11:34:00",
+                                       "2020-01-01 11:34:00"),
+                        end_time = c("2020-01-01 11:34:00",
+                                     "2020-01-02 17:34:00"))
+
+  checkDT$start_time <- lubridate::as_datetime(checkDT$start_time)
+  checkDT$end_time <- lubridate::as_datetime(checkDT$end_time)
+
+
+  expect_message(interval_census(checkDT,
+                              identifier = "patient",
+                              admit = "start_time",
+                              discharge = 'end_time',
+                              group_var = 'bed',
+                              time_unit = "1 hour",
+                              results =  "total",
+                              uniques = TRUE))
+
+
+
+
+})
 
