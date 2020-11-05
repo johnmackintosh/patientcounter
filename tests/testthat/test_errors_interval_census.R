@@ -326,7 +326,7 @@ test_that("non datetime discharge column throws error", {
 
 
 
-test_that("same start and end time causes warning", {
+test_that("same start and end time causes message", {
   checkDT <- data.table(bed = c("A","B"),
                         patient = c(3,4),
                         start_time = c("2020-01-01 11:34:00",
