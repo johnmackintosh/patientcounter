@@ -62,7 +62,7 @@ To be clear, TRUE will count patients only once per interval.
 
 Setting "uniques" to  FALSE will count each patient entry per interval.
 If a patient moves during an interval then at least two rows will be returned
-for tha patient for that particular interval.
+for that patient for that particular interval.
 This is useful if you want to count occupied beds, or track moves  or
 transfers between departments.
 

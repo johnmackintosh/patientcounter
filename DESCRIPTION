@@ -19,8 +19,9 @@ License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 2.10)
 Imports: 
-    data.table, 
-    lubridate
+    data.table,
+    lubridate,
+    magrittr
 LazyData: true
 URL: https://github.com/johnmackintosh/patientcounter
 BugReports: https://github.com/johnmackintosh/patientcounter/issues

@@ -106,6 +106,36 @@ head(patient_count_hour)
 Note that you also receive the base date and base hour for each interval
 to enable easier filtering of the results.
 
+## Grouped values
+
+This example shows grouping results by bed and hour.  
+The first ten rows of the resulting grouped values are shown
+
+``` r
+library(patientcounter)
+grouped <- interval_census(beds, 
+identifier = 'patient',
+admit = 'start_time', 
+discharge = 'end_time', 
+group_var = 'bed', 
+time_unit = '1 hour',
+results = "group", 
+uniques = FALSE)
+
+head(grouped[bed %chin% c('A', 'B')],10)
+#>     bed  interval_beginning        interval_end  base_date base_hour N
+#>  1:   A 2020-01-01 09:00:00 2020-01-01 10:00:00 2020-01-01         9 1
+#>  2:   B 2020-01-01 09:00:00 2020-01-01 10:00:00 2020-01-01         9 1
+#>  3:   A 2020-01-01 10:00:00 2020-01-01 11:00:00 2020-01-01        10 2
+#>  4:   B 2020-01-01 10:00:00 2020-01-01 11:00:00 2020-01-01        10 1
+#>  5:   B 2020-01-01 11:00:00 2020-01-01 12:00:00 2020-01-01        11 1
+#>  6:   A 2020-01-01 11:00:00 2020-01-01 12:00:00 2020-01-01        11 2
+#>  7:   B 2020-01-01 12:00:00 2020-01-01 13:00:00 2020-01-01        12 1
+#>  8:   A 2020-01-01 12:00:00 2020-01-01 13:00:00 2020-01-01        12 1
+#>  9:   B 2020-01-01 13:00:00 2020-01-01 14:00:00 2020-01-01        13 1
+#> 10:   A 2020-01-01 13:00:00 2020-01-01 14:00:00 2020-01-01        13 1
+```
+
 ## General Help
 
   - You must ‘quote’ your variables, for the time being at least..
@@ -125,7 +155,7 @@ to enable easier filtering of the results.
   - To count individual patients ONLY, leave ‘uniques’ at the default
     value of ‘TRUE’.  
   - To count patient moves between locations during intervals, set
-    ‘uniques’ to ‘FALSE’. Patients who occupy beds in different locations
+    uniques to ‘FALSE’. Patients who occupy beds in different locations
     during each interval are accounted for in each location. They will
     be counted at least twice during an interval - both in their initial
     location and their new location following a move.

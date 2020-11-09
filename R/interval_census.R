@@ -43,7 +43,7 @@
 #'
 #' Setting "uniques" to  FALSE will count each patient entry per interval.
 #' If a patient moves during an interval then at least two rows will be returned
-#' for tha patient for that particular interval.
+#' for that patient for that particular interval.
 #' This is useful if you want to count occupied beds, or track moves  or
 #' transfers between departments.
 #'
@@ -207,7 +207,7 @@ interval_census <- function(df,
   }
 
   if (max(pat_DT[["join_start"]],na.rm = TRUE) > max(pat_DT[["join_end"]],na.rm = TRUE)) {
-    pat_DT[join_start > join_end,join_end := maxdate]
+    pat_DT[join_start > join_end, join_end := maxdate]
   }
 
   ts <- seq(mindate,maxdate, by = time_unit)
@@ -249,17 +249,11 @@ interval_census <- function(df,
 
   }
 
-  out_of_zone <- ref[join_start > join_end,.N][]
-  #.bad_dates <- ref[join_start > join_end,]
- # setnames(.bad_dates,
-          # old = c("join_start","join_end"),
-          # new = c("interval_beginning","interval_end"),
-          # skip_absent = TRUE)
-
-  if (out_of_zone >= 1) {
-    message(paste0(out_of_zone,' ', "date(s) span(s) timezone changes and has / have been identified"))
-    # print(.bad_dates)
-  }
+  # out_of_zone <- ref[join_start > join_end,.N][]
+  #
+  # if (out_of_zone >= 1) {
+  #   message(paste0(out_of_zone,' ', "date(s) span(s) timezone changes and has / have been identified"))
+  # }
 
 
   pat_DT <- pat_DT[join_start < join_end,][]

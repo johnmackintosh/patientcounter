@@ -95,6 +95,25 @@ Note that you also receive the base date and base hour for each
 interval to enable easier filtering of the results.
 
 
+## Grouped values
+
+This example shows grouping results by bed and hour.  
+The first ten rows of the resulting grouped values are shown
+
+```{r grouped}
+library(patientcounter)
+grouped <- interval_census(beds, 
+identifier = 'patient',
+admit = 'start_time', 
+discharge = 'end_time', 
+group_var = 'bed', 
+time_unit = '1 hour',
+results = "group", 
+uniques = FALSE)
+
+head(grouped[bed %chin% c('A', 'B')],10)
+```
+
 
 ## General Help
 
@@ -162,3 +181,6 @@ head(patient_count_time_adjust)
 ```
 
 Valid values for time_adjust_period are 'start_min', 'start_sec', 'end_min' and 'end_sec'
+
+
+
