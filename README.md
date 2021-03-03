@@ -1,6 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
 # patientcounter <img src="man/figures/logo.png" width="160px" align="right" />
@@ -21,8 +20,7 @@ status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patien
 
 [![](https://img.shields.io/github/last-commit/johnmackintosh/patientcounter.svg)](https://github.com/johnmackintosh/patientcounter/commits/master)
 
-[![R build
-status](https://github.com/johnmackintosh/patientcounter/workflows/R-CMD-check/badge.svg)](https://github.com/johnmackintosh/patientcounter/actions)
+[![R-CMD-check](https://github.com/johnmackintosh/patientcounter/workflows/R-CMD-check/badge.svg)](https://github.com/johnmackintosh/patientcounter/actions)
 <!-- badges: end -->
 
 How many patients were in the hospital at 10 AM yesterday?  
@@ -31,7 +29,7 @@ How many were in during the last week, by hour?
 
 This package aims to make answering these questions easier and quicker.
 
-No SQL? No problem\!
+No SQL? No problem!
 
 If you have time in, time out, a unique patient identifier, and
 optionally, a grouping variable to track moves between departments, this
@@ -140,23 +138,23 @@ head(grouped[bed %chin% c('A', 'B')],10)
 
 ## General Help
 
-  - You must ‘quote’ your variables, for the time being at least..
+-   You must ‘quote’ your variables, for the time being at least..
 
 ## Results
 
-  - Set results to ‘patient’ for 1 row per patient per interval for each
+-   Set results to ‘patient’ for 1 row per patient per interval for each
     interval in the patient stay.
-  - Set results to ‘group’ to get a count per group per interval.  
+-   Set results to ‘group’ to get a count per group per interval.  
     Remember this will also be influenced by the ‘uniques’ argument -
     set it to FALSE to ensure each move in each location is counted.  
-  - Set results to ‘total’ for a summary of the data set - interval,
+-   Set results to ‘total’ for a summary of the data set - interval,
     base\_hour and count.
 
 ## Tracking moves within the same interval with ‘uniques’
 
-  - To count individual patients ONLY, leave ‘uniques’ at the default
+-   To count individual patients ONLY, leave ‘uniques’ at the default
     value of ‘TRUE’.  
-  - To count patient moves between locations during intervals, set
+-   To count patient moves between locations during intervals, set
     uniques to ‘FALSE’. Patients who occupy beds in different locations
     during each interval are accounted for in each location. They will
     be counted at least twice during an interval - both in their initial
@@ -164,7 +162,7 @@ head(grouped[bed %chin% c('A', 'B')],10)
 
 ## Timezones
 
-  - Everything is easier if you use “UTC” by default. You can attempt to
+-   Everything is easier if you use “UTC” by default. You can attempt to
     coerce the final results yourself using lubridate::force\_tz()
 
 To find your system timezone:
