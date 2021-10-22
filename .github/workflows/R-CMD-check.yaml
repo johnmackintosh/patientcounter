@@ -5,10 +5,14 @@ on:
     branches:
       - main
       - master
+      - development
+      - development-**
   pull_request:
     branches:
       - main
       - master
+      - development
+      - development-**
 
 name: R-CMD-check
 
@@ -48,7 +52,7 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
-      - name: Cache R packages
+      - name: Restore R package cache
         if: runner.os != 'Windows'
         uses: actions/cache@v2
         with:
@@ -65,7 +69,16 @@ jobs:
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
 
       - name: Install dependencies
+        if: runner.os != 'Windows'
         run: |
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Install dependencies
+        if: runner.os == 'Windows'
+        run: |
+          options(pkgType = "binary")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
