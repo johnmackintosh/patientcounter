@@ -21,6 +21,7 @@ status](https://ci.appveyor.com/api/projects/status/github/johnmackintosh/patien
 [![](https://img.shields.io/github/last-commit/johnmackintosh/patientcounter.svg)](https://github.com/johnmackintosh/patientcounter/commits/master)
 
 [![R-CMD-check](https://github.com/johnmackintosh/patientcounter/workflows/R-CMD-check/badge.svg)](https://github.com/johnmackintosh/patientcounter/actions)
+
 <!-- badges: end -->
 
 How many patients were in the hospital at 10 AM yesterday?  
