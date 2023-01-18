@@ -217,3 +217,6 @@ head(patient_count_time_adjust)
 
 Valid values for time\_adjust\_period are ‘start\_min’, ‘start\_sec’,
 ‘end\_min’ and ‘end\_sec’
+
+## Similar work
+See my package [juncture](https://github.com/johnmackintosh/juncture) which does exactly the same thing, but is easier to type (the function is simply called 'juncture') and uses tinytest and checkmate for testing, so has even fewer dependencies
